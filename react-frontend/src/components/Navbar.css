@@ -1,0 +1,108 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+  
+body {
+    font-family: Arial, sans-serif;
+}
+  
+/* Navbar */
+.navbar {
+    background-color: #002f6c; /* Blue */
+    color: #f5c300; /* Golden */
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    text-decoration: none;
+}
+  
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+}
+  
+.logo img {
+    width: 100px;
+    height: auto;
+}
+  
+/* Navigation Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+  
+.nav-links li {
+    position: relative;
+    padding: 10px 15px;
+}
+  
+.nav-links a {
+    text-decoration: none;
+    color: #f5c300; /* Golden */
+    font-size: 16px;
+    transition: color 0.3s;
+    outline: none; /* Remove outline */
+    border: none; /* Remove border */
+}
+  
+.nav-links a:hover {
+    color: #d18b00; /* Dark Golden */
+}
+  
+.nav-links li:hover .dropdown-menu {
+    display: block;
+}
+  
+/* Hamburger Menu (Mobile) */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: #f5c300; /* Golden */
+    font-size: 24px;
+    cursor: pointer;
+}
+  
+/* Hamburger hover effect */
+.hamburger:hover {
+    color: #d18b00; /* Dark Golden */
+}
+  
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #002f6c; /* Blue */
+        padding: 10px 0;
+        border-top: 2px solid #f5c300; /* Golden */
+    }
+  
+    .nav-links.active {
+        display: flex;
+    }
+  
+    .hamburger {
+        display: block;
+    }
+}

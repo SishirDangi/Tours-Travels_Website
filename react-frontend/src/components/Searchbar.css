@@ -1,0 +1,32 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Adjust the space between elements */
+    padding: 1rem;
+    background-color: transparent; /* Adjust as needed */
+  }
+  
+  .dropdown {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #555;
+    font-size: 1rem; /* Adjust as needed */
+  }
+  
+  .search-button {
+    padding: 0.5rem 1.5rem;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border-radius: 1rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3; /* Darker shade for hover */
+  }
+  

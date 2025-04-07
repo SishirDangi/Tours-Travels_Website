@@ -1,0 +1,168 @@
+/* Container styling */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: rgb(210, 209, 209);
+  font-family: Arial, sans-serif;
+}
+
+.login-box {
+  width: 400px;
+  padding: 40px;
+  background: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+/* Input Groups */
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.input-group input:focus {
+  border-color: #2193b0;
+}
+
+/* Password Group */
+.password-group {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2193b0;
+  font-size: 14px;
+}
+
+.toggle-password:hover {
+  text-decoration: underline;
+}
+
+/* Login Button */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2193b0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  font-size: 18px;
+}
+
+.login-btn:hover {
+  background: #1b7c8a;
+}
+
+/* Options */
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.options label {
+  cursor: pointer;
+}
+
+.options a {
+  text-decoration: none;
+  color: #2193b0;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+/* Or Text */
+.or-text {
+  margin: 15px 0;
+  font-size: 16px;
+  color: #777;
+}
+
+/* Role Buttons */
+.role-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.role-btn {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease-in-out;
+  width: 48%;
+  background-color: white;
+  color: black;
+}
+
+.role-btn:hover {
+  background-color: #2193b0;
+  color: white;
+}
+
+.selected {
+  background-color: #2193b0;
+  color: white;
+  border-color: #2193b0;
+}
+
+/* Signup Text */
+.signup-text {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-text a {
+  color: #2193b0;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
