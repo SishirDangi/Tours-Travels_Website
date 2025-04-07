@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import styles from "./EnquiryNow.module.css";
+import "./EnquiryNow.css"; // You can include custom CSS
 
 const EnquiryNow = () => {
   const [formData, setFormData] = useState({
@@ -11,13 +11,13 @@ const EnquiryNow = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: value, 
+      [name]: value,
     }));
   };
 
@@ -31,25 +31,28 @@ const EnquiryNow = () => {
     }
 
     setLoading(true);
+    setResponseMessage(""); // Reset previous response message
 
     try {
-    
-      const response = await axios.post("http://127.0.0.1:5000/enquiry", formData);
-      alert(response.data.message || "Enquiry Submitted Successfully!");
+      const response = await axios.post(
+        "http://127.0.0.1:8001/api/enquiry",
+        formData
+      );
+      setResponseMessage(response.data.message || "Enquiry Submitted Successfully!");
       setFormData({ fullName: "", phone: "", email: "", message: "" });
     } catch (error) {
-      console.error("Error submitting enquiry:", error.response?.data?.error || error.message);
-      alert(error.response?.data?.message || "Submission failed. Try again.");
+      console.error("Error submitting enquiry:", error);
+      setResponseMessage("Submission failed. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.enquiryContainer}>
-      <div className={styles.formBox}>
-        <h2 className={styles.title}>Enquire Now</h2>
-        <form onSubmit={handleSubmit} className={styles.form}>
+    <div className="enquiry-container">
+      <div className="form-box">
+        <h2 className="title">Enquiry Now</h2>
+        <form onSubmit={handleSubmit} className="form">
           <input
             type="text"
             name="fullName"
@@ -57,7 +60,7 @@ const EnquiryNow = () => {
             value={formData.fullName}
             onChange={handleChange}
             required
-            className={styles.input}
+            className="input"
           />
           <input
             type="text"
@@ -66,7 +69,7 @@ const EnquiryNow = () => {
             value={formData.phone}
             onChange={handleChange}
             required
-            className={styles.input}
+            className="input"
           />
           <input
             type="email"
@@ -75,7 +78,7 @@ const EnquiryNow = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className={styles.input}
+            className="input"
           />
           <textarea
             name="message"
@@ -83,12 +86,13 @@ const EnquiryNow = () => {
             value={formData.message}
             onChange={handleChange}
             required
-            className={styles.textarea}
+            className="textarea"
           />
-          <button type="submit" className={styles.submitButton} disabled={loading}>
+          <button type="submit" className="submit-button" disabled={loading}>
             {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
+        {responseMessage && <p className="response-message">{responseMessage}</p>}
       </div>
     </div>
   );

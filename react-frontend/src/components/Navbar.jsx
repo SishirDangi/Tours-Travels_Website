@@ -23,7 +23,7 @@ const Navbar = () => {
           <li><Link to="/destinations" onClick={() => setIsOpen(false)}>Destinations</Link></li>
           <li><Link to="/packages" onClick={() => setIsOpen(false)}>Packages</Link></li>
           <li><Link to="/about" onClick={() => setIsOpen(false)}>About Us</Link></li>
-          <li><Link to="/contact" onClick={() => setIsOpen(false)}>Contact Us</Link></li>
+          <li><Link to="/enquiry" onClick={() => setIsOpen(false)}>Enquiry Now</Link></li>
           <li><Link to="/login" onClick={() => setIsOpen(false)}>Login</Link></li>
           <li><Link to="/register" onClick={() => setIsOpen(false)}>Register</Link></li>
         </ul>

@@ -1,0 +1,30 @@
+.sitemap-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem;
+    padding-top: 0;
+    margin-top: 0;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  .sitemap-heading {
+    margin-top: 35px;
+    margin-bottom: 1.5rem;
+    font-size: 3rem;
+    color: #fada0c;
+    text-align: center;
+  }
+  
+  .map-frame {
+    width: 90%;
+    max-width: 90%;
+    height: 400px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  

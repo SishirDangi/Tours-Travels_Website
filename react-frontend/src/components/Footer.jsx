@@ -35,10 +35,10 @@ const Footer = () => {
           <ul>
             <li><Link to="/about">About Us</Link></li>
             <li><Link to="#">Blogs</Link></li>
-            <li><Link to="#">Booking Policy</Link></li>
-            <li><Link to="#">Sitemap</Link></li>
-            <li><Link to="#">Privacy Policy</Link></li>
-            <li><Link to="#">Help & FAQs</Link></li>
+            <li><Link to="/bookingpolicy">Booking Policy</Link></li>
+            <li><Link to="/sitemap">Sitemap</Link></li>
+            <li><Link to="register">Register</Link></li>
+            <li><Link to="login">Login</Link></li>
           </ul>
         </div>
 
@@ -70,9 +70,9 @@ const Footer = () => {
         <div className="footer-bottom-container">
           <p>Copyright © {currentYear}, Yatra Nepal | All rights reserved</p>
           <div className="footer-links">
-            <Link to="#">Terms & Condition</Link>
-            <Link to="#">Privacy Policy</Link>
-            <Link to="#">FAQs</Link>
+            <Link to="/terms">Terms & Condition</Link>
+            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="faqs">FAQs</Link>
           </div>
         </div>
       </div>

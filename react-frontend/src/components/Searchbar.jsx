@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import "./SearchBar.css"; // Import the CSS file for custom styles
+import "./SearchBar.css";
 
 export default function SearchBar() {
   const [category, setCategory] = useState("All Categories");
@@ -28,9 +28,9 @@ export default function SearchBar() {
         onChange={(e) => setDestination(e.target.value)}
       >
         <option>Any Destinations</option>
-        <option>Europe</option>
-        <option>Asia</option>
-        <option>America</option>
+        <option>Kathmandu</option>
+        <option>Bhaktapur</option>
+        <option>Lalitpur</option>
       </select>
 
       {/* Sort Dropdown */}

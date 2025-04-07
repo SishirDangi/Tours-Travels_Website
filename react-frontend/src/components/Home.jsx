@@ -4,6 +4,8 @@ import SearchBar from "./Searchbar";
 import AboutUs from "./AboutUs";
 import Footer from "./Footer";
 import Whychooseus from "./Whychooseus";
+import Sitemap from "./Sitemap";
+import ContactInfo from "./ContactInfo";
 
 const Home = () => {
   return (
@@ -23,6 +25,12 @@ const Home = () => {
       </div>
       <div>
         <Whychooseus/>
+      </div>
+      <div>
+        <ContactInfo/>
+      </div>
+      <div>
+        <Sitemap/>
       </div>
       <div>
         <Footer/>
