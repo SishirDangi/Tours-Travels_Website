@@ -28,8 +28,8 @@ class RegisterController extends Controller
             'last_name' => $request->last_name,
             'mobile_no' => $request->mobile_no,
             'email' => $request->email,
-            'address' => null,  // You can add address if necessary
-            'country_id' => null,  // You can add country_id if necessary
+            'address' => null,
+            'country_id' => null,
         ]);
 
         // Create user with default role_id = 2 (user)

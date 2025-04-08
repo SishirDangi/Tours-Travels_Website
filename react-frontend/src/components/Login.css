@@ -1,168 +1,140 @@
-/* Container styling */
-.login-container {
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background:white;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: rgb(210, 209, 209);
-  font-family: Arial, sans-serif;
+  margin: 0;
 }
 
-.login-box {
-  width: 400px;
+.login-container {
+  background: #fff;
   padding: 40px;
-  background: white;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
-  text-align: center;
-  animation: fadeIn 0.5s ease-in-out;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-h2 {
-  margin-bottom: 20px;
-  font-size: 28px;
+.login-box h2 {
+  margin-bottom: 10px;
+  font-weight: 600;
   color: #333;
-  letter-spacing: 1px;
 }
 
-/* Input Groups */
+.login-box p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
 .input-group {
   margin-bottom: 20px;
-  position: relative;
 }
 
 .input-group input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  outline: none;
-  font-size: 16px;
-  transition: border-color 0.3s ease-in-out;
+  font-size: 14px;
+  transition: border-color 0.3s;
 }
 
 .input-group input:focus {
-  border-color: #2193b0;
+  border-color: #6a11cb;
+  outline: none;
 }
 
-/* Password Group */
 .password-group {
-  display: flex;
-  align-items: center;
+  position: relative;
 }
 
 .toggle-password {
-  margin-left: 10px;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  color: #2193b0;
-  font-size: 14px;
-}
-
-.toggle-password:hover {
-  text-decoration: underline;
-}
-
-/* Login Button */
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background: #2193b0;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease-in-out;
-  font-size: 18px;
-}
-
-.login-btn:hover {
-  background: #1b7c8a;
-}
-
-/* Options */
-.options {
-  display: flex;
-  justify-content: space-between;
-  margin: 15px 0;
-  font-size: 14px;
-}
-
-.options label {
-  cursor: pointer;
-}
-
-.options a {
-  text-decoration: none;
-  color: #2193b0;
-}
-
-.options a:hover {
-  text-decoration: underline;
-}
-
-/* Or Text */
-.or-text {
-  margin: 15px 0;
   font-size: 16px;
-  color: #777;
 }
 
-/* Role Buttons */
-.role-buttons {
+.role-selection {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.role-btn {
-  padding: 10px 20px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
+.role-selection label {
+  display: flex;
+  align-items: center;
   cursor: pointer;
+}
+
+.role-selection input {
+  margin-right: 10px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
   font-size: 16px;
-  transition: background 0.3s ease-in-out;
-  width: 48%;
-  background-color: white;
-  color: black;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.role-btn:hover {
-  background-color: #2193b0;
-  color: white;
+.login-btn:hover {
+  background: linear-gradient(to right, #2575fc, #6a11cb);
 }
 
-.selected {
-  background-color: #2193b0;
-  color: white;
-  border-color: #2193b0;
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
 }
 
-/* Signup Text */
+.options label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.options input {
+  margin-right: 10px;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: #2575fc;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
 .signup-text {
+  text-align: center;
   margin-top: 20px;
   font-size: 14px;
 }
 
 .signup-text a {
-  color: #2193b0;
+  color: #2575fc;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .signup-text a:hover {
   text-decoration: underline;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

@@ -1,53 +1,82 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AxiosInstance from './AxiosInstance';
+import './Login.css';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+    role: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState(null); 
-
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  };
+
+  const handleRoleChange = (role) => {
+    setCredentials({ ...credentials, role });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { email, password, role } = credentials;
 
     if (!role) {
-      alert("Please select User or Admin before logging in.");
+      alert('Please select a role before logging in.');
       return;
     }
 
-    console.log("Email:", email, "Password:", password, "Role:", role);
+    try {
+      const response = await AxiosInstance.post('/login', {
+        email,
+        password,
+        role,
+      });
 
-    // Redirect based on role
-    if (role === "user") {
-      navigate("/user-login");
-    } else if (role === "admin") {
-      navigate("/admin-login");
+      const { access_token, user } = response.data;
+
+      // Store token and user data as needed (e.g., in localStorage or context)
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Redirect based on role
+      if (user.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else if (user.role === 'user') {
+        navigate('/user-dashboard');
+      }
+    } catch (error) {
+      console.error('Login failed:', error.response?.data || error.message);
+      alert('Login failed. Please check your credentials.');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
+        <h2>Welcome Back!</h2>
+        <p>Please login to your account</p>
+        <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input
               type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              placeholder="Email Address"
+              value={credentials.email}
+              onChange={handleChange}
               required
             />
           </div>
           <div className="input-group password-group">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={credentials.password}
+              onChange={handleChange}
               required
             />
             <button
@@ -55,26 +84,31 @@ const Login = () => {
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? "🙈 Hide" : "👁 Show"}
+              {showPassword ? '🙈' : '👁️'}
             </button>
           </div>
 
-          <p className="or-text">Login as</p>
-          <div className="role-buttons">
-            <button
-              type="button"
-              className={`role-btn ${role === "user" ? "selected" : ""}`}
-              onClick={() => setRole("user")}
-            >
+          <div className="role-selection">
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="user"
+                checked={credentials.role === 'user'}
+                onChange={() => handleRoleChange('user')}
+              />
               User
-            </button>
-            <button
-              type="button"
-              className={`role-btn ${role === "admin" ? "selected" : ""}`}
-              onClick={() => setRole("admin")}
-            >
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="admin"
+                checked={credentials.role === 'admin'}
+                onChange={() => handleRoleChange('admin')}
+              />
               Admin
-            </button>
+            </label>
           </div>
 
           <button type="submit" className="login-btn">
@@ -85,11 +119,10 @@ const Login = () => {
             <label>
               <input type="checkbox" /> Remember Me
             </label>
-            <a href="/" className="forgot-password">
+            <a href="/forgot-password" className="forgot-password">
               Forgot Password?
             </a>
           </div>
-          <p> or </p>
 
           <p className="signup-text">
             Don’t have an account? <a href="/signup">Sign up</a>
