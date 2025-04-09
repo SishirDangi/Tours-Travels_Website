@@ -9,7 +9,7 @@ import ContactInfo from "./ContactInfo";
 
 const Home = () => {
   return (
-    <div>
+  <>
       <div className="home-container">
         <div className="Explore">
           <h1>Explore Nepal</h1>
@@ -35,7 +35,7 @@ const Home = () => {
       <div>
         <Footer/>
       </div>
-    </div>
+  </>
   );
 };
 

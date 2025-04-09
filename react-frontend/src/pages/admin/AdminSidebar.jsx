@@ -1,35 +1,35 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import "./AdminSidebar.css"; // Styles for sidebar
+import { NavLink } from "react-router-dom";
+import {
+  FaTachometerAlt,
+  FaCalendarAlt,
+  FaRoute,
+  FaUsers,
+  FaCog,
+  FaSignOutAlt,
+  FaBox,
+  FaEnvelope
+} from "react-icons/fa";
+import "./AdminSidebar.css";
 
 const AdminSidebar = () => {
-    const location = useLocation(); // Get current path
-
-    return (
-        <div className="sidebar">
-            <h2>Admin Panel</h2>
-            <ul>
-                <li className={location.pathname === "/admin/dashboard" ? "active" : ""}>
-                    <Link to="/admin/dashboard">Dashboard</Link>
-                </li>
-                <li className={location.pathname === "/admin/booking" ? "active" : ""}>
-                    <Link to="/admin/booking">Booking</Link>
-                </li>
-                <li className={location.pathname === "/admin/tours" ? "active" : ""}>
-                    <Link to="/admin/tours">Tours</Link>
-                </li>
-                <li className={location.pathname === "/admin/guide" ? "active" : ""}>
-                    <Link to="/admin/guide">Guide</Link>
-                </li>
-                <li className={location.pathname === "/admin/blogs" ? "active" : ""}>
-                    <Link to="/admin/blogs">Blogs</Link>
-                </li>
-                <li className={location.pathname === "/admin/settings" ? "active" : ""}>
-                    <Link to="/admin/settings">Settings</Link>
-                </li>
-            </ul>
-        </div>
-    );
+  return (
+    <aside className="admin-sidebar">
+      <div className="admin-sidebar-logo">Tours & Travels Admin</div>
+      <nav className="admin-sidebar-nav-links">
+        <NavLink to="dashboard"><FaTachometerAlt /> Dashboard</NavLink>
+        <NavLink to="bookings"><FaCalendarAlt /> Bookings</NavLink>
+        <NavLink to="packages"><FaBox/> Packages</NavLink>
+        <NavLink to="enquiries"><FaEnvelope /> Enquiries</NavLink>
+        <NavLink to="tours"><FaRoute /> Tours</NavLink>
+        <NavLink to="guides"><FaUsers /> Guides</NavLink>
+        <NavLink to="settings"><FaCog /> Settings</NavLink>
+      </nav>
+      <button className="admin-sidebar-logout-btn">
+        <FaSignOutAlt /> Log Out
+      </button>
+    </aside>
+  );
 };
 
 export default AdminSidebar;

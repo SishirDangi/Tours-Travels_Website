@@ -1,5 +1,5 @@
 import React from 'react';
-import './Sitemap.css'; // Import the external CSS
+import './Sitemap.css'; 
 
 const Sitemap = () => {
   return (

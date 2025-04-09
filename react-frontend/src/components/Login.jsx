@@ -38,7 +38,6 @@ const Login = () => {
 
       const { access_token, user } = response.data;
 
-      // Store token and user data as needed (e.g., in localStorage or context)
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('user', JSON.stringify(user));
 
@@ -55,7 +54,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-body">
+      <div className="login-container">
       <div className="login-box">
         <h2>Welcome Back!</h2>
         <p>Please login to your account</p>
@@ -84,7 +84,7 @@ const Login = () => {
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? '🙈' : '👁️'}
+              {showPassword ? 'hide' : 'show'}
             </button>
           </div>
 
@@ -130,6 +130,8 @@ const Login = () => {
         </form>
       </div>
     </div>
+    </div>
+    
   );
 };
 

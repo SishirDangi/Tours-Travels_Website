@@ -1,18 +1,17 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserRoutes from "./routes/UserRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
 
-
-const App = () => {
+function App() {
   return (
-    <>
-      <div>
-        <UserRoutes />
-        
-      </div>
-      
-      
-    </>
+    <Router>
+      <Routes>
+        <Route path="/*" element={<UserRoutes />} />
+        <Route path="/admin-dashboard/*" element={<AdminRoutes />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
