@@ -10,27 +10,56 @@ class PackageController extends Controller
 {
     // Get all packages
     public function index()
-    {
-        return response()->json(Package::all(), Response::HTTP_OK);
-    }
+{
+    $packages = Package::all();
+
+    // Include the full URL for the image
+    $packages->map(function ($package) {
+        if ($package->pkg_image_path) {
+            $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
+        }
+        return $package;
+    });
+
+    return response()->json($packages, Response::HTTP_OK);
+}
+
 
     // Create a new package
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming data
+        $validated = $request->validate([
             'package_name' => 'required|string|max:255',
             'package_description' => 'nullable|string',
             'package_type' => 'nullable|string|max:100',
             'package_price' => 'required|numeric',
-            'pkg_image_path' => 'nullable|string',
+            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validate image
             'status_id' => 'nullable|exists:statuses,id',
         ]);
 
-        $package = Package::create($request->all());
+        // Check if an image is uploaded
+        if ($request->hasFile('pkg_image')) {
+            $image = $request->file('pkg_image');
+            $imagePath = $image->store('images/packages', 'public'); // Store the image in the 'public/images/packages' folder
+        } else {
+            $imagePath = null;
+        }
+
+        // Create the package with the image path
+        $package = Package::create([
+            'package_name' => $validated['package_name'],
+            'package_description' => $validated['package_description'],
+            'package_type' => $validated['package_type'],
+            'package_price' => $validated['package_price'],
+            'pkg_image_path' => $imagePath, // Save image path
+            'status_id' => $validated['status_id'],
+        ]);
+
         return response()->json($package, Response::HTTP_CREATED);
     }
 
-    // Get a specific package
+    // Show a single package
     public function show($id)
     {
         $package = Package::find($id);
@@ -48,16 +77,23 @@ class PackageController extends Controller
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'package_name' => 'sometimes|string|max:255',
             'package_description' => 'sometimes|nullable|string',
             'package_type' => 'sometimes|nullable|string|max:100',
             'package_price' => 'sometimes|required|numeric',
-            'pkg_image_path' => 'sometimes|nullable|string',
+            'pkg_image' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_id' => 'sometimes|nullable|exists:statuses,id',
         ]);
 
-        $package->update($request->all());
+        // Handle image upload for updates
+        if ($request->hasFile('pkg_image')) {
+            $image = $request->file('pkg_image');
+            $imagePath = $image->store('images/packages', 'public');
+            $validated['pkg_image_path'] = $imagePath;
+        }
+
+        $package->update($validated);
         return response()->json($package, Response::HTTP_OK);
     }
 

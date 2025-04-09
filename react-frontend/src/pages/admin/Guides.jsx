@@ -6,4 +6,4 @@ const Guides = () => {
   )
 }
 
-export default Guides
+export default Guides;

@@ -1,13 +1,311 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Packages.css';
 
-const APackages = () => {
+const Packages = () => {
+  const [formData, setFormData] = useState({
+    package_name: '',
+    package_description: '',
+    package_type: '',
+    package_price: '',
+    status_id: '',
+    pkg_image: null,
+  });
+
+  const [packages, setPackages] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const packagesPerPage = 10;
+
+  useEffect(() => {
+    fetchStatuses();
+    fetchPackages();
+  }, []);
+
+  const fetchStatuses = async () => {
+    try {
+      const response = await axios.get('http://localhost:8001/api/statuses');
+      setStatuses(response.data);
+    } catch (error) {
+      console.error('Error fetching statuses:', error);
+    }
+  };
+
+  const fetchPackages = async () => {
+    try {
+      const response = await axios.get('http://localhost:8001/api/packages');
+      setPackages(response.data);
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === 'pkg_image') {
+      const file = files[0];
+      setFormData({ ...formData, pkg_image: file });
+      setPreviewImage(file ? URL.createObjectURL(file) : null);
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = new FormData();
+    for (let key in formData) {
+      if (formData[key]) {
+        form.append(key, formData[key]);
+      }
+    }
+
+    try {
+      if (selectedPackage) {
+        await axios.post(`http://localhost:8001/api/packages/${selectedPackage.id}?_method=PUT`, form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        setMessage('Package updated successfully!');
+      } else {
+        await axios.post('http://localhost:8001/api/packages', form, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        setMessage('Package added successfully!');
+      }
+
+      // Clear form and reset image preview
+      setSelectedPackage(null);
+      setFormData({
+        package_name: '',
+        package_description: '',
+        package_type: '',
+        package_price: '',
+        status_id: '',
+        pkg_image: null,
+      });
+      setPreviewImage(null);
+      
+      // Manually reset the file input
+      document.querySelector('input[name="pkg_image"]').value = '';
+
+      fetchPackages();
+    } catch (error) {
+      console.error('Submit error:', error);
+      setMessage('Error processing the package.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (pkg) => {
+    setSelectedPackage(pkg);
+    setFormData({
+      package_name: pkg.package_name,
+      package_description: pkg.package_description,
+      package_type: pkg.package_type,
+      package_price: pkg.package_price,
+      status_id: pkg.status_id,
+      pkg_image: null,
+    });
+    setPreviewImage(pkg.pkg_image ? `http://localhost:8001/uploads/${pkg.pkg_image}` : null);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this package?')) {
+      try {
+        await axios.delete(`http://localhost:8001/api/packages/${id}`);
+        setMessage('Package deleted successfully!');
+        fetchPackages();
+      } catch (error) {
+        console.error('Delete error:', error);
+        setMessage('Error deleting package.');
+      }
+    }
+  };
+
+  const getStatusName = (id) => {
+    const status = statuses.find((s) => s.id === id);
+    return status ? status.status_name.charAt(0).toUpperCase() + status.status_name.slice(1) : 'N/A';
+  };
+
+  const filteredPackages = packages.filter((pkg) =>
+    pkg.package_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastPackage = currentPage * packagesPerPage;
+  const indexOfFirstPackage = indexOfLastPackage - packagesPerPage;
+  const currentPackages = filteredPackages.slice(indexOfFirstPackage, indexOfLastPackage);
+  const totalPages = Math.ceil(filteredPackages.length / packagesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div>
-      <h2>Packages</h2>
-      <p>Manage your packages here.</p>
-      {/* Add your package management UI components */}
+    <div className="packages-container">
+      <h2>{selectedPackage ? 'Update Package' : 'Add New Package'}</h2>
+      {message && <p>{message}</p>}
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <div>
+          <label>Package Name:</label>
+          <input
+            type="text"
+            name="package_name"
+            value={formData.package_name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Package Description:</label>
+          <textarea
+            name="package_description"
+            value={formData.package_description}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label>Package Type:</label>
+          <select
+            name="package_type"
+            value={formData.package_type}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Type</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Nature">Nature</option>
+            <option value="Culture">Culture</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Package Price:</label>
+          <input
+            type="number"
+            name="package_price"
+            value={formData.package_price}
+            step="1"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Status:</label>
+          <select
+            name="status_id"
+            value={formData.status_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Status</option>
+            {statuses.map((status) => (
+              <option key={status.id} value={status.id}>
+                {status.status_name.charAt(0).toUpperCase() + status.status_name.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label>Package Image:</label>
+          <input
+            type="file"
+            name="pkg_image"
+            accept="image/*"
+            onChange={handleChange}
+          />
+          {previewImage && <img src={previewImage} alt="Preview" width="150" />}
+        </div>
+
+        <button type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : selectedPackage ? 'Update Package' : 'Create Package'}
+        </button>
+      </form>
+
+      <div className="all-packages-design">
+        All Packages
+      </div>
+
+      <div className='packages-searchbar'>
+        <span className="search-label">Search: </span>
+        <input
+          type="text"
+          placeholder="Search by package name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginBottom: '10px', padding: '5px', width: '200px' }}
+        />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Package Name</th>
+            <th>Image</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentPackages.length === 0 ? (
+            <tr>
+              <td colSpan="6">No packages found</td>
+            </tr>
+          ) : (
+            currentPackages.map((pkg) => (
+              <tr key={pkg.id}>
+                <td>{pkg.package_name}</td>
+                <td>
+                  {pkg.pkg_image_url ? (
+                    <img
+                      src={pkg.pkg_image_url}
+                      alt={pkg.package_name}
+                      width="90"
+                    />
+                  ) : (
+                    'No Image'
+                  )}
+                </td>
+                <td>{pkg.package_type}</td>
+                <td>{getStatusName(pkg.status_id)}</td>
+                <td>{pkg.package_price}</td>
+                <td className='Package-edit-delete'>
+                  <button onClick={() => handleEdit(pkg)}>Edit</button>
+                  <button onClick={() => handleDelete(pkg.id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, idx) => (
+          <button
+            key={idx + 1}
+            onClick={() => handlePageChange(idx + 1)}
+            className={currentPage === idx + 1 ? 'active' : ''}
+          >
+            {idx + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default APackages;
+export default Packages;

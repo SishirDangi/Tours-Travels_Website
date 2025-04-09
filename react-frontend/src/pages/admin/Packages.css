@@ -1,0 +1,192 @@
+.packages-container {
+    padding: 30px;
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .packages-container h2 {
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+  }
+  
+  .packages-container p {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+  
+  .packages-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .packages-container form div {
+    margin-bottom: 15px;
+  }
+  
+  .packages-container form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+  }
+  
+  .packages-container form input,
+  .packages-container form select,
+  .packages-container form textarea {
+    padding: 12px;
+    margin-top: 8px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+  }
+  
+  .packages-container form input:focus,
+  .packages-container form select:focus,
+  .packages-container form textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  .packages-container form button {
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+  }
+  
+  .packages-container form button:hover {
+    background-color: #45a049;
+  }
+  
+  .packages-container form button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  .packages-container h3 {
+    font-size: 1.8em;
+    margin-top: 40px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .packages-container table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+  }
+  
+  .packages-container table th,
+  .packages-container table td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .packages-container table th {
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 1.1em;
+  }
+  
+  .packages-container table td {
+    font-size: 1em;
+    color: #555;
+  }
+  
+  .packages-container table button {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .packages-container table button:hover {
+    background-color: #c0392b;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pagination button {
+    margin: 0 8px;
+    padding: 8px 15px;
+    font-size: 1em;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:hover {
+    background-color: #bbb;
+  }
+  
+  .pagination button.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .pagination button:focus {
+    outline: none;
+  }
+  
+  .all-packages-design {
+    display: flex;
+    justify-content: center;
+    font-size: 3em;
+    font-weight: 600;
+    color: #333;
+    margin-top: 30px;
+    padding: 10px;
+    text-align: center;
+  }
+  /* SearchBar */
+  .packages-searchbar {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+  
+  .packages-searchbar input {
+    padding: 5px;
+    width: 200px;
+  }
+
+  .search-label {
+    margin-right: 10px;
+    font-size: 1em;
+    font-weight: 600;
+  }
+
+  .Package-edit-delete {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .Package-edit-delete button {
+    flex-shrink: 0;
+  }
+  

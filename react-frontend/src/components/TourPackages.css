@@ -1,0 +1,102 @@
+/* General container styling */
+.tour-packages {
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  /* Title styling */
+  .tour-packages h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  /* Flex container for the packages list */
+  .packages-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Provides consistent space between the cards */
+  }
+  
+  /* Styling for each package card */
+  .package-card {
+    width: 250px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .package-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Styling for the image */
+  .package-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 2px solid #eee;
+  }
+  
+  /* Package name styling */
+  .package-card h3 {
+    font-size: 1.4rem;
+    color: #333;
+    margin: 15px 10px 10px;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  /* Package description styling */
+  .package-card p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 10px 10px;
+    line-height: 1.5;
+    text-align: left;
+  }
+  
+  /* Price styling */
+  .package-card .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2e7d32;
+    margin: 0 10px 15px;
+    text-align: left;
+  }
+  
+  /* Add a default image if the package doesn't have one */
+  .package-card img {
+    object-fit: cover;
+    height: 200px;
+  }
+  
+  /* Button styling (optional, if you want to add actions like "Book Now") */
+  .package-card button {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 90%;
+    margin: 10px auto;
+    transition: background-color 0.3s ease;
+  }
+  
+  .package-card button:hover {
+    background-color: #1b5e20;
+  }
+  

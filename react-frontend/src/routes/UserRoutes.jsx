@@ -18,7 +18,7 @@ const UserRoutes = () => {
   return (
     <>
     <Navbar/>
-      <Routes>    
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<TourPackages />} />
         <Route path="/enquiry" element={<EnquiryNow />} />

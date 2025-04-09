@@ -1,4 +1,3 @@
-// src/pages/admin/DashboardHome.jsx
 import React from "react";
 
 const DashboardHome = () => {
