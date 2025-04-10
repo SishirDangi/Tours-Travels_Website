@@ -175,7 +175,7 @@
     width: 200px;
   }
 
-  .search-label {
+  .package-search-label {
     margin-right: 10px;
     font-size: 1em;
     font-weight: 600;
@@ -189,4 +189,5 @@
   .Package-edit-delete button {
     flex-shrink: 0;
   }
+  
   

@@ -8,6 +8,7 @@ const Packages = () => {
     package_description: '',
     package_type: '',
     package_price: '',
+    duration: '',
     status_id: '',
     pkg_image: null,
   });
@@ -70,30 +71,33 @@ const Packages = () => {
 
     try {
       if (selectedPackage) {
-        await axios.post(`http://localhost:8001/api/packages/${selectedPackage.id}?_method=PUT`, form, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        await axios.post(
+          `http://localhost:8001/api/packages/${selectedPackage.id}?_method=PUT`,
+          form,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
         setMessage('Package updated successfully!');
       } else {
-        await axios.post('http://localhost:8001/api/packages', form, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        await axios.post(
+          'http://localhost:8001/api/packages',
+          form,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
         setMessage('Package added successfully!');
       }
 
-      // Clear form and reset image preview
+      // Reset form
       setSelectedPackage(null);
       setFormData({
         package_name: '',
         package_description: '',
         package_type: '',
         package_price: '',
+        duration: '',
         status_id: '',
         pkg_image: null,
       });
       setPreviewImage(null);
-      
-      // Manually reset the file input
       document.querySelector('input[name="pkg_image"]').value = '';
 
       fetchPackages();
@@ -112,10 +116,11 @@ const Packages = () => {
       package_description: pkg.package_description,
       package_type: pkg.package_type,
       package_price: pkg.package_price,
+      duration: pkg.duration || '',
       status_id: pkg.status_id,
       pkg_image: null,
     });
-    setPreviewImage(pkg.pkg_image ? `http://localhost:8001/uploads/${pkg.pkg_image}` : null);
+    setPreviewImage(pkg.pkg_image_url || null);
   };
 
   const handleDelete = async (id) => {
@@ -171,6 +176,7 @@ const Packages = () => {
             name="package_description"
             value={formData.package_description}
             onChange={handleChange}
+            required
           />
         </div>
 
@@ -202,6 +208,17 @@ const Packages = () => {
         </div>
 
         <div>
+          <label>Duration:</label>
+          <input
+            type="text"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            placeholder="e.g., 3 days, 1 week"
+          />
+        </div>
+
+        <div>
           <label>Status:</label>
           <select
             name="status_id"
@@ -210,11 +227,17 @@ const Packages = () => {
             required
           >
             <option value="">Select Status</option>
-            {statuses.map((status) => (
-              <option key={status.id} value={status.id}>
-                {status.status_name.charAt(0).toUpperCase() + status.status_name.slice(1)}
-              </option>
-            ))}
+            {statuses
+              .filter(
+                (status) =>
+                  status.status_name.toLowerCase() === 'active' ||
+                  status.status_name.toLowerCase() === 'inactive'
+              )
+              .map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.status_name.charAt(0).toUpperCase() + status.status_name.slice(1)}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -225,6 +248,7 @@ const Packages = () => {
             name="pkg_image"
             accept="image/*"
             onChange={handleChange}
+            required
           />
           {previewImage && <img src={previewImage} alt="Preview" width="150" />}
         </div>
@@ -234,12 +258,10 @@ const Packages = () => {
         </button>
       </form>
 
-      <div className="all-packages-design">
-        All Packages
-      </div>
+      <div className="all-packages-design">All Packages</div>
 
-      <div className='packages-searchbar'>
-        <span className="search-label">Search: </span>
+      <div className="packages-searchbar">
+        <span className="package-search-label">Search: </span>
         <input
           type="text"
           placeholder="Search by package name..."
@@ -257,13 +279,14 @@ const Packages = () => {
             <th>Type</th>
             <th>Status</th>
             <th>Price</th>
+            <th>Duration</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentPackages.length === 0 ? (
             <tr>
-              <td colSpan="6">No packages found</td>
+              <td colSpan="7">No packages found</td>
             </tr>
           ) : (
             currentPackages.map((pkg) => (
@@ -271,11 +294,7 @@ const Packages = () => {
                 <td>{pkg.package_name}</td>
                 <td>
                   {pkg.pkg_image_url ? (
-                    <img
-                      src={pkg.pkg_image_url}
-                      alt={pkg.package_name}
-                      width="90"
-                    />
+                    <img src={pkg.pkg_image_url} alt={pkg.package_name} width="90" />
                   ) : (
                     'No Image'
                   )}
@@ -283,7 +302,8 @@ const Packages = () => {
                 <td>{pkg.package_type}</td>
                 <td>{getStatusName(pkg.status_id)}</td>
                 <td>{pkg.package_price}</td>
-                <td className='Package-edit-delete'>
+                <td>{pkg.duration || 'N/A'}</td>
+                <td className="Package-edit-delete">
                   <button onClick={() => handleEdit(pkg)}>Edit</button>
                   <button onClick={() => handleDelete(pkg.id)}>Delete</button>
                 </td>

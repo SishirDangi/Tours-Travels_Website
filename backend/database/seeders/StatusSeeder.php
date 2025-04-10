@@ -10,7 +10,7 @@ class StatusSeeder extends Seeder
     public function run()
     {
         // Predefined status values
-        $statuses = ['active', 'booked', 'booking', 'deactivate', 'pending'];
+        $statuses = ['active', 'booked', 'booking', 'inactive', 'pending'];
 
         // Insert statuses into the table
         foreach ($statuses as $status) {

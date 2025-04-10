@@ -5,54 +5,52 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Package;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PackageController extends Controller
 {
     // Get all packages
     public function index()
-{
-    $packages = Package::all();
+    {
+        $packages = Package::all();
 
-    // Include the full URL for the image
-    $packages->map(function ($package) {
-        if ($package->pkg_image_path) {
-            $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
-        }
-        return $package;
-    });
+        // Include full image URL
+        $packages->map(function ($package) {
+            if ($package->pkg_image_path) {
+                $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
+            }
+            return $package;
+        });
 
-    return response()->json($packages, Response::HTTP_OK);
-}
-
+        return response()->json($packages, Response::HTTP_OK);
+    }
 
     // Create a new package
     public function store(Request $request)
     {
-        // Validate the incoming data
         $validated = $request->validate([
             'package_name' => 'required|string|max:255',
             'package_description' => 'nullable|string',
-            'package_type' => 'nullable|string|max:100',
+            'package_type' => 'required|string|max:100',
             'package_price' => 'required|numeric',
-            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validate image
-            'status_id' => 'nullable|exists:statuses,id',
+            'duration' => 'nullable|string|max:50',
+            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_id' => 'required|exists:statuses,id',
         ]);
 
-        // Check if an image is uploaded
+        $imagePath = null;
         if ($request->hasFile('pkg_image')) {
             $image = $request->file('pkg_image');
-            $imagePath = $image->store('images/packages', 'public'); // Store the image in the 'public/images/packages' folder
-        } else {
-            $imagePath = null;
+            $imagePath = $image->store('images/packages', 'public');
         }
 
-        // Create the package with the image path
         $package = Package::create([
             'package_name' => $validated['package_name'],
-            'package_description' => $validated['package_description'],
+            'package_description' => $validated['package_description'] ?? null,
             'package_type' => $validated['package_type'],
             'package_price' => $validated['package_price'],
-            'pkg_image_path' => $imagePath, // Save image path
+            'duration' => $validated['duration'] ?? null,
+            'pkg_image_path' => $imagePath,
             'status_id' => $validated['status_id'],
         ]);
 
@@ -66,6 +64,11 @@ class PackageController extends Controller
         if (!$package) {
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
+
+        if ($package->pkg_image_path) {
+            $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
+        }
+
         return response()->json($package, Response::HTTP_OK);
     }
 
@@ -78,15 +81,16 @@ class PackageController extends Controller
         }
 
         $validated = $request->validate([
-            'package_name' => 'sometimes|string|max:255',
-            'package_description' => 'sometimes|nullable|string',
-            'package_type' => 'sometimes|nullable|string|max:100',
-            'package_price' => 'sometimes|required|numeric',
-            'pkg_image' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status_id' => 'sometimes|nullable|exists:statuses,id',
+            'package_name' => 'required|string|max:255',
+            'package_description' => 'nullable|string',
+            'package_type' => 'required|string|max:100',
+            'package_price' => 'required|numeric',
+            'duration' => 'nullable|string|max:50',
+            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_id' => 'required|exists:statuses,id',
         ]);
 
-        // Handle image upload for updates
+        // Handle image upload if provided
         if ($request->hasFile('pkg_image')) {
             $image = $request->file('pkg_image');
             $imagePath = $image->store('images/packages', 'public');
@@ -94,6 +98,7 @@ class PackageController extends Controller
         }
 
         $package->update($validated);
+
         return response()->json($package, Response::HTTP_OK);
     }
 
@@ -105,7 +110,13 @@ class PackageController extends Controller
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
 
+        // If there is an image, delete it from storage
+        if ($package->pkg_image_path) {
+            Storage::disk('public')->delete($package->pkg_image_path);
+        }
+
         $package->delete();
+
         return response()->json(['message' => 'Package deleted successfully'], Response::HTTP_OK);
     }
 }

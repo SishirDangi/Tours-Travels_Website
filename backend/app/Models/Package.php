@@ -14,6 +14,7 @@ class Package extends Model
         'package_type',
         'package_price',
         'pkg_image_path',
+        'duration',
         'status_id',
     ];
 
