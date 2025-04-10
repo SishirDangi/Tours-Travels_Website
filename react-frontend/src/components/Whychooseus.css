@@ -6,7 +6,7 @@
   
   .why-title {
     font-size: 42px;
-    color: #007bff; /* Main theme color */
+    color: #007bff;
     margin-bottom: 10px;
   }
   
@@ -38,30 +38,29 @@
     font-size: 36px;
     margin-bottom: 15px;
   }
-  
-  /* Unique colors for each icon */
+
   .reason-card:nth-child(1) .icon {
-    color: #ff6347; /* Tomato red for "Trusted by Thousands" */
+    color: #ff6347;
   }
   
   .reason-card:nth-child(2) .icon {
-    color: #32cd32; /* Lime green for "Expert Local Guides" */
+    color: #32cd32;
   }
   
   .reason-card:nth-child(3) .icon {
-    color: #1e90ff; /* Dodger blue for "Customizable Packages" */
+    color: #1e90ff;
   }
   
   .reason-card:nth-child(4) .icon {
-    color: #f39c12; /* Orange for "Affordable Prices" */
+    color: #f39c12;
   }
   
   .reason-card:nth-child(5) .icon {
-    color: #8e44ad; /* Purple for "24/7 Support" */
+    color: #8e44ad;
   }
   
   .reason-card:nth-child(6) .icon {
-    color: #e74c3c; /* Red for "Safety First" */
+    color: #e74c3c;
   }
   
   .reason-card h3 {

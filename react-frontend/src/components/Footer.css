@@ -1,7 +1,6 @@
-/* General Footer Styling */
 .footer {
-    background-color: #002f6c; /* Blue */
-    color: #f5c300; /* Golden */
+    background-color: #002f6c;
+    color: #f5c300;
     padding: 60px 60px 20px;
     font-family: 'Arial', sans-serif;
     text-align: left;
@@ -21,7 +20,7 @@
 
 .footer-section h2 {
     font-size: 26px;
-    color: #f5c300; /* Golden */
+    color: #f5c300;
     margin-bottom: 20px;
     font-weight: 600;
     text-transform: uppercase;
@@ -30,7 +29,7 @@
 
 .footer-section h3 {
     font-size: 20px;
-    color: #f5c300; /* Golden */
+    color: #f5c300;
     margin-top: 25px;
     margin-bottom: 15px;
     font-weight: 500;
@@ -39,7 +38,7 @@
 
 .footer-section p {
     font-size: 16px;
-    color: #fff; /* White */
+    color: #fff;
     line-height: 1.8;
     margin-bottom: 10px;
 }
@@ -55,18 +54,18 @@
 }
 
 .footer-section ul li a {
-    color: #fff; /* White */
+    color: #fff;
     font-size: 16px;
     text-decoration: none;
     transition: color 0.3s ease, padding-left 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-    color: #cda508; /* Golden */
+    color: #cda508;
     padding-left: 10px;
 }
 
-/* Social Icons */
+
 .social-icons {
     margin-top: 10px;
 }
@@ -98,15 +97,13 @@
 }
 
 .enquiry-button:hover {
-    background-color: #e0a100; /* Darker Golden */
+    background-color: #e0a100;
     transform: scale(1.05);
 }
 
-/* Footer Bottom Section (Fixed to Bottom Look) */
-
 .footer-bottom {
     width: 100%;
-    background-color: #002f6c; /* Blue */
+    background-color: #002f6c;
     padding: 20px 10% 0 10%;
     border-top: 2px solid #76660b;
     margin-top: 0;
@@ -125,7 +122,7 @@
 
 .footer-bottom-container p {
     font-size: 15px;
-    color: #fff; /* White */
+    color: #fff;
     margin: 0;
 }
 
@@ -136,18 +133,17 @@
 }
 
 .footer-links a {
-    color: #fff; /* White */
+    color: #fff;
     font-size: 15px;
     text-decoration: none;
     transition: color 0.3s ease, padding-left 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #d18b00; /* Golden */
+    color: #d18b00;
     padding-left: 5px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .footer-container {
         flex-direction: column;

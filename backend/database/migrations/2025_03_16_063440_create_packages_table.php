@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('pkg_image_path');
             $table->string('duration')->nullable();
 
-            // Fix: Use unsignedBigInteger + nullable for foreign key with set null
             $table->unsignedBigInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
 

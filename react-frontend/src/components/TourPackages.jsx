@@ -41,7 +41,7 @@ const TourPackages = () => {
       <h2 className="tourpackage-h2">Tour Packages</h2>
       <div className="tourpackage-packages-grid">
         {packages
-          .filter(pkg => pkg.status_id === 1) // ✅ Filter only active packages
+          .filter(pkg => pkg.status_id === 1)
           .map(pkg => (
             <div
               key={pkg.id}

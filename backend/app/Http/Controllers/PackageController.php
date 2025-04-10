@@ -14,7 +14,6 @@ class PackageController extends Controller
     {
         $packages = Package::all();
 
-        // Include full image URL
         $packages->map(function ($package) {
             if ($package->pkg_image_path) {
                 $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
@@ -109,8 +108,7 @@ class PackageController extends Controller
         if (!$package) {
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
-
-        // If there is an image, delete it from storage
+        
         if ($package->pkg_image_path) {
             Storage::disk('public')->delete($package->pkg_image_path);
         }

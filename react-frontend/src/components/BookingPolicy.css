@@ -5,16 +5,16 @@
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    font-family: sans-serif; /* Apply sans-serif font */
+    font-family: sans-serif;
   }
   
   .booking-policy-header h1 {
     font-size: 2.6rem;
     text-align: center;
-    color: #cda508; /* Solid gold color */
+    color: #cda508;
     font-weight: bold;
     margin-bottom: 10px;
-    text-shadow: 0 0 8px rgba(205, 165, 8, 0.6); /* Soft glow */
+    text-shadow: 0 0 8px rgba(205, 165, 8, 0.6);
   }
   
   
@@ -47,7 +47,7 @@
   }
   
   .bullet-icon {
-    color: #cda508; /* New Gold Color */
+    color: #cda508;
     font-size: 1.4rem;
     margin-right: 15px;
     margin-top: 3px;

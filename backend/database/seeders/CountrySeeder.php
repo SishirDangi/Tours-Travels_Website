@@ -9,7 +9,6 @@ class CountrySeeder extends Seeder
 {
     public function run()
     {
-        // List of all countries with country codes and phone codes
         $countries = [
             ['country_code' => 'AF', 'country_name' => 'Afghanistan', 'phone_code' => '+93'],
             ['country_code' => 'AL', 'country_name' => 'Albania', 'phone_code' => '+355'],
@@ -60,7 +59,6 @@ class CountrySeeder extends Seeder
             ['country_code' => 'VN', 'country_name' => 'Vietnam', 'phone_code' => '+84'],
         ];
 
-        // Insert into the database
         DB::table('countries')->insert($countries);
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import "./Footer.css"; 
+import "./Footer.css";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
 import { MdLocationOn } from "react-icons/md";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./EnquiryNow.css"; // You can include custom CSS
+import "./EnquiryNow.css";
 
 const EnquiryNow = () => {
   const [formData, setFormData] = useState({
@@ -23,15 +23,14 @@ const EnquiryNow = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate fields
+ 
     if (!formData.fullName || !formData.phone || !formData.email || !formData.message) {
       alert("All fields are required!");
       return;
     }
 
     setLoading(true);
-    setResponseMessage(""); // Reset previous response message
+    setResponseMessage("");
 
     try {
       const response = await axios.post(

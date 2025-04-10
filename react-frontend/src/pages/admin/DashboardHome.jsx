@@ -9,4 +9,4 @@ const DashboardHome = () => {
   );
 };
 
-export default DashboardHome; // <-- make sure this is here
+export default DashboardHome;

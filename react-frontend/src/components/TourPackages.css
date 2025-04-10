@@ -130,9 +130,9 @@
   background-color: #218838;
 }
 
-/* Optional: loading text style */
 .loading {
   text-align: center;
   font-size: 1.5rem;
+  margin-top: 50px;
   padding: 50px;
 }

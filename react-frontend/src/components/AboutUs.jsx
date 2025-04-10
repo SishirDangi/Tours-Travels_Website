@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AboutUs.css"; // Import external CSS
+import "./AboutUs.css";
 
 const AboutSection = () => {
   const [showMore, setShowMore] = useState(false);

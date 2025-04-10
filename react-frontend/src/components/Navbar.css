@@ -1,18 +1,16 @@
-/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-  
 body {
     font-family: Arial, sans-serif;
 }
   
 /* Navbar */
 .navbar {
-    background-color: #002f6c; /* Blue */
-    color: #f5c300; /* Golden */
+    background-color: #002f6c;
+    color: #f5c300;
     padding: 10px 20px;
     position: fixed;
     width: 100%;
@@ -54,15 +52,15 @@ body {
   
 .nav-links a {
     text-decoration: none;
-    color: #f5c300; /* Golden */
+    color: #f5c300;
     font-size: 16px;
     transition: color 0.3s;
-    outline: none; /* Remove outline */
-    border: none; /* Remove border */
+    outline: none;
+    border: none;
 }
   
 .nav-links a:hover {
-    color: #d18b00; /* Dark Golden */
+    color: #d18b00;
 }
   
 .nav-links li:hover .dropdown-menu {
@@ -74,14 +72,14 @@ body {
     display: none;
     background: none;
     border: none;
-    color: #f5c300; /* Golden */
+    color: #f5c300;
     font-size: 24px;
     cursor: pointer;
 }
   
 /* Hamburger hover effect */
 .hamburger:hover {
-    color: #d18b00; /* Dark Golden */
+    color: #d18b00;
 }
   
 /* Responsive Design */
@@ -93,9 +91,9 @@ body {
         position: absolute;
         top: 60px;
         left: 0;
-        background-color: #002f6c; /* Blue */
+        background-color: #002f6c;
         padding: 10px 0;
-        border-top: 2px solid #f5c300; /* Golden */
+        border-top: 2px solid #f5c300;
     }
   
     .nav-links.active {

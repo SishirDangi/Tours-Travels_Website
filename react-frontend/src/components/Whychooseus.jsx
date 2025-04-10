@@ -1,6 +1,6 @@
 import React from "react";
 import { FaStar, FaMapMarkedAlt, FaSuitcase, FaMoneyBillAlt, FaPhoneAlt, FaShieldAlt } from 'react-icons/fa';
-import "./Whychooseus.css"; // External CSS file
+import "./Whychooseus.css";
 
 const Whychooseus = () => {
   const reasons = [

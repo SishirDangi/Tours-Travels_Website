@@ -22,7 +22,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-
-
 Route::post('/register', [RegisterController::class, 'register']);
 
