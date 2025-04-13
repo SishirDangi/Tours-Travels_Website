@@ -34,7 +34,7 @@ const EnquiryNow = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8001/api/enquiry",
+        "http://127.0.0.1:8001/api/enquiries",
         formData
       );
       setResponseMessage(response.data.message || "Enquiry Submitted Successfully!");
@@ -48,10 +48,10 @@ const EnquiryNow = () => {
   };
 
   return (
-    <div className="enquiry-container">
-      <div className="form-box">
-        <h2 className="title">Enquiry Now</h2>
-        <form onSubmit={handleSubmit} className="form">
+    <div className="enquiry-now-container">
+      <div className="enquiry-form-box">
+        <h2 className="enquiry-form-title">Enquiry Now</h2>
+        <form onSubmit={handleSubmit} className="enquiry-form">
           <input
             type="text"
             name="fullName"
@@ -59,7 +59,7 @@ const EnquiryNow = () => {
             value={formData.fullName}
             onChange={handleChange}
             required
-            className="input"
+            className="enquiry-input"
           />
           <input
             type="text"
@@ -68,7 +68,7 @@ const EnquiryNow = () => {
             value={formData.phone}
             onChange={handleChange}
             required
-            className="input"
+            className="enquiry-input"
           />
           <input
             type="email"
@@ -77,7 +77,7 @@ const EnquiryNow = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="input"
+            className="enquiry-input"
           />
           <textarea
             name="message"
@@ -85,13 +85,13 @@ const EnquiryNow = () => {
             value={formData.message}
             onChange={handleChange}
             required
-            className="textarea"
+            className="enquiry-textarea"
           />
           <button type="submit" className="submit-button" disabled={loading}>
             {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
-        {responseMessage && <p className="response-message">{responseMessage}</p>}
+        {responseMessage && <p className="enquiry-response-message">{responseMessage}</p>}
       </div>
     </div>
   );

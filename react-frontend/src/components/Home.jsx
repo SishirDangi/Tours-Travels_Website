@@ -26,6 +26,7 @@ const Home = () => {
       <div>
         <Whychooseus/>
       </div>
+      
       <div>
         <ContactInfo/>
       </div>

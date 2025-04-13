@@ -1,0 +1,9 @@
+.booking-container{
+    background-color: #ffffff;
+}
+
+.booking-heading {
+   margin-top: 70px;
+   display: flex;
+   justify-content: center;
+  }

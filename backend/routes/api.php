@@ -3,10 +3,16 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PackageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Models\Status;
+use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\RegisterController;
+
+
+Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
+Route::post('/register', [RegisterController::class, 'register']);
 Route::apiResource('bookings', BookingController::class);
 Route::apiResource('packages', PackageController::class);
 
@@ -22,5 +28,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-Route::post('/register', [RegisterController::class, 'register']);
+Route::controller(EnquiryController::class)->group(function () {
+    Route::get('/enquiries', 'index');
+    Route::post('/enquiries', 'store');
+    Route::put('/enquiries/{id}/resolve', 'resolve');
+});
 
+
+Route::resource('users', UserController::class)->only([
+    'index', 'update', 'destroy'
+]);

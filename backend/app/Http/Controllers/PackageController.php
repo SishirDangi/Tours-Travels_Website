@@ -15,8 +15,13 @@ class PackageController extends Controller
         $packages = Package::all();
 
         $packages->map(function ($package) {
+            // Handle image URL
             if ($package->pkg_image_path) {
                 $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
+            }
+            // Handle tour category field
+            if ($package->tour_category) {
+                $package->tour_category_name = $package->tour_category;  // For clarity, if needed
             }
             return $package;
         });
@@ -35,6 +40,7 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:50',
             'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_id' => 'required|exists:statuses,id',
+            'tour_category' => 'nullable|string|max:255',  // Validate tour category
         ]);
 
         $imagePath = null;
@@ -51,6 +57,7 @@ class PackageController extends Controller
             'duration' => $validated['duration'] ?? null,
             'pkg_image_path' => $imagePath,
             'status_id' => $validated['status_id'],
+            'tour_category' => $validated['tour_category'] ?? null,  // Store tour category
         ]);
 
         return response()->json($package, Response::HTTP_CREATED);
@@ -64,8 +71,14 @@ class PackageController extends Controller
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
 
+        // Handle image URL
         if ($package->pkg_image_path) {
             $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
+        }
+
+        // Handle tour category
+        if ($package->tour_category) {
+            $package->tour_category_name = $package->tour_category;
         }
 
         return response()->json($package, Response::HTTP_OK);
@@ -87,6 +100,7 @@ class PackageController extends Controller
             'duration' => 'nullable|string|max:50',
             'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_id' => 'required|exists:statuses,id',
+            'tour_category' => 'nullable|string|max:255',  // Validate tour category
         ]);
 
         // Handle image upload if provided
@@ -96,6 +110,7 @@ class PackageController extends Controller
             $validated['pkg_image_path'] = $imagePath;
         }
 
+        // Update package
         $package->update($validated);
 
         return response()->json($package, Response::HTTP_OK);
@@ -108,7 +123,7 @@ class PackageController extends Controller
         if (!$package) {
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
-        
+
         if ($package->pkg_image_path) {
             Storage::disk('public')->delete($package->pkg_image_path);
         }

@@ -6,4 +6,4 @@ const Tours = () => {
   )
 }
 
-export default Tours
+export default Tours;

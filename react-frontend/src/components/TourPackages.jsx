@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaClock } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './TourPackages.css';
 
 const TourPackages = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const packagesPerPage = 12;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -24,25 +27,57 @@ const TourPackages = () => {
     fetchPackages();
   }, []);
 
+  const filteredPackages = packages
+    .filter(pkg =>
+      pkg.status_id === 1 &&
+      pkg.package_name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => a.package_name.localeCompare(b.package_name));
+
+  // Pagination Logic
+  const indexOfLastPackage = currentPage * packagesPerPage;
+  const indexOfFirstPackage = indexOfLastPackage - packagesPerPage;
+  const currentPackages = filteredPackages.slice(indexOfFirstPackage, indexOfLastPackage);
+  const totalPages = Math.ceil(filteredPackages.length / packagesPerPage);
+
   const handlePackageClick = (pkg) => {
-    setSelectedPackage(pkg);
+    navigate('/booking', { state: { package: pkg } });
   };
 
-  const handleCloseModal = () => {
-    setSelectedPackage(null);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  if (loading) return <div className="loading">Loading...</div>;
 
   return (
-    <div className="tourpackage-container">
-      <h2 className="tourpackage-h2">Tour Packages</h2>
-      <div className="tourpackage-packages-grid">
-        {packages
-          .filter(pkg => pkg.status_id === 1)
-          .map(pkg => (
+    <>
+      {/* Hero Section */}
+      <div className="tourpackage-hero">
+        <img src="/our-packages.jpg" alt="Hero" className="tourpackage-hero-image" />
+        <div className="tourpackage-hero-overlay">
+          <h1 className="tourpackage-hero-title">Our Packages</h1>
+        </div>
+      </div>
+
+      {/* Main Section */}
+      <div className="tourpackage-container">
+        {/* Search */}
+        <div className="tourpackage-search">
+          <input
+            type="text"
+            placeholder="Search packages..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+
+        {/* Package Cards */}
+        <div className="tourpackage-packages-grid">
+          {currentPackages.map(pkg => (
             <div
               key={pkg.id}
               className="tourpackage-package-card"
@@ -68,28 +103,24 @@ const TourPackages = () => {
               </div>
             </div>
           ))}
-      </div>
-
-      {selectedPackage && (
-        <div className="tourpackage-modal-overlay" onClick={handleCloseModal}>
-          <div className="tourpackage-modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>{selectedPackage.package_name}</h3>
-            <img
-              src={selectedPackage.pkg_image_url || 'default-image.jpg'}
-              alt={selectedPackage.package_name}
-              className="tourpackage-modal-package-image"
-            />
-            <p><strong>Description:</strong> {selectedPackage.package_description}</p>
-            <p><strong>Package Type:</strong> {selectedPackage.package_type}</p>
-            <p><strong>Price:</strong> ${Number(selectedPackage.package_price || 0).toFixed(2)}</p>
-            <p><strong>Duration:</strong> {selectedPackage.duration || 'N/A'}</p>
-            <div className="tourpackage-modal-buttons">
-              <Link to="/booking" className="tourpackage-button booknow">Book Now</Link>
-            </div>
-          </div>
         </div>
-      )}
-    </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={currentPage === index + 1 ? 'active' : ''}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

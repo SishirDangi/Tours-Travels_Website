@@ -8,7 +8,8 @@ import {
   FaCog,
   FaSignOutAlt,
   FaBox,
-  FaEnvelope
+  FaEnvelope,
+  FaUsersCog
 } from "react-icons/fa";
 import "./AdminSidebar.css";
 
@@ -21,8 +22,9 @@ const AdminSidebar = () => {
         <NavLink to="bookings"><FaCalendarAlt /> Bookings</NavLink>
         <NavLink to="packages"><FaBox/> Packages</NavLink>
         <NavLink to="enquiries"><FaEnvelope /> Enquiries</NavLink>
-        <NavLink to="tours"><FaRoute /> Tours</NavLink>
+        <NavLink to="tours"><FaRoute /> Active Tours</NavLink>
         <NavLink to="guides"><FaUsers /> Guides</NavLink>
+        <NavLink to="users"><FaUsersCog /> Users</NavLink>
         <NavLink to="settings"><FaCog /> Settings</NavLink>
       </nav>
       <button className="admin-sidebar-logout-btn">

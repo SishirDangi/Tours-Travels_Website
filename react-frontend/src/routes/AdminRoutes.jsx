@@ -7,6 +7,7 @@ import Packages from "../pages/admin/Packages";
 import Enquiries from "../pages/admin/Enquiries";
 import Tours from "../pages/admin/Tours";
 import Guides from "../pages/admin/Guides";
+import Users from "../pages/admin/Users";
 import Settings from "../pages/admin/Settings";
 
 const AdminRoutes = () => {
@@ -19,6 +20,7 @@ const AdminRoutes = () => {
         <Route path="enquiries" element={<Enquiries/>} />
         <Route path="tours" element={<Tours />} />
         <Route path="guides" element={<Guides />} />
+        <Route path="users" element={<Users />} />
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

@@ -16,5 +16,12 @@ class Enquiry extends Model
         'phone',
         'email',
         'message',
+        'status_id',
     ];
+
+    // Relationship: each enquiry belongs to a status
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 }

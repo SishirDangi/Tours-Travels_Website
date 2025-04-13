@@ -16,6 +16,7 @@ class Package extends Model
         'pkg_image_path',
         'duration',
         'status_id',
+        'tour_category',
     ];
 
     public function status()
