@@ -4,6 +4,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import DashboardHome from "../pages/admin/DashboardHome";
 import Bookings from "../pages/admin/Bookings";
 import Packages from "../pages/admin/Packages";
+import PackageDetails from "../pages/admin/PackageDetails";
 import Enquiries from "../pages/admin/Enquiries";
 import Tours from "../pages/admin/Tours";
 import Guides from "../pages/admin/Guides";
@@ -17,6 +18,7 @@ const AdminRoutes = () => {
         <Route path="dashboard" element={<DashboardHome />} />
         <Route path="bookings" element={<Bookings />} />
         <Route path="packages" element={<Packages/>} />
+        <Route path="/package-details" element={<PackageDetails/>} />
         <Route path="enquiries" element={<Enquiries/>} />
         <Route path="tours" element={<Tours />} />
         <Route path="guides" element={<Guides />} />

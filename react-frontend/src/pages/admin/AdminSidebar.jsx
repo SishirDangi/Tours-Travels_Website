@@ -9,7 +9,8 @@ import {
   FaSignOutAlt,
   FaBox,
   FaEnvelope,
-  FaUsersCog
+  FaUsersCog,
+  FaClipboardList
 } from "react-icons/fa";
 import "./AdminSidebar.css";
 
@@ -21,6 +22,7 @@ const AdminSidebar = () => {
         <NavLink to="dashboard"><FaTachometerAlt /> Dashboard</NavLink>
         <NavLink to="bookings"><FaCalendarAlt /> Bookings</NavLink>
         <NavLink to="packages"><FaBox/> Packages</NavLink>
+        <NavLink to="package-details"><FaClipboardList /> Package Details</NavLink>
         <NavLink to="enquiries"><FaEnvelope /> Enquiries</NavLink>
         <NavLink to="tours"><FaRoute /> Active Tours</NavLink>
         <NavLink to="guides"><FaUsers /> Guides</NavLink>

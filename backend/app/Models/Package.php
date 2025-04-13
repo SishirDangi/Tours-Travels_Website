@@ -23,4 +23,8 @@ class Package extends Model
     {
         return $this->belongsTo(Status::class);
     }
+    public function details()
+    {
+        return $this->hasOne(PackageDetail::class);
+    }
 }

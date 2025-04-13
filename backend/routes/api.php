@@ -9,7 +9,7 @@ use App\Models\Status;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RegisterController;
-
+use App\Http\Controllers\PackageDetailController;
 
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 Route::post('/register', [RegisterController::class, 'register']);
@@ -38,3 +38,8 @@ Route::controller(EnquiryController::class)->group(function () {
 Route::resource('users', UserController::class)->only([
     'index', 'update', 'destroy'
 ]);
+
+
+Route::post('/package-details/{packageId}', [PackageDetailController::class, 'store']);
+Route::get('/package-details/{packageId}', [PackageDetailController::class, 'show']);
+Route::delete('/package-details/{packageId}', [PackageDetailController::class, 'destroy']);
