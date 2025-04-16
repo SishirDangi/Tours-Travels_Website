@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Package;
 use Illuminate\Http\Response;
 
 class BookingController extends Controller
@@ -17,17 +18,35 @@ class BookingController extends Controller
     // Create a new booking
     public function store(Request $request)
     {
+        // Validate the required fields
         $request->validate([
-            'booking_date' => 'required|date',
-            'booking_time' => 'required',
-            'total_price' => 'required|numeric',
-            'discount' => 'required|numeric',
             'contact_id' => 'required|exists:contacts,id',
             'package_id' => 'required|exists:packages,id',
-            'status_id' => 'nullable|exists:statuses,id',
         ]);
 
-        $booking = Booking::create($request->all());
+        // Get the selected package
+        $package = Package::find($request->package_id);
+        if (!$package) {
+            return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Set current date and time for booking
+        $currentDateTime = now();
+
+        // Prepare booking data
+        $bookingData = [
+            'booking_date' => $currentDateTime->toDateString(),  // Store only date part
+            'booking_time' => $currentDateTime->toTimeString(),  // Store only time part
+            'total_price' => $package->package_price,  // Total price from the selected package
+            'discount' => null,  // Set discount as null initially
+            'contact_id' => $request->contact_id,  // Valid contact ID
+            'package_id' => $request->package_id,  // Valid package ID
+            'status_id' => 2,  // Status set to "2" (booked)
+        ];
+
+        // Create the booking
+        $booking = Booking::create($bookingData);
+
         return response()->json($booking, Response::HTTP_CREATED);
     }
 

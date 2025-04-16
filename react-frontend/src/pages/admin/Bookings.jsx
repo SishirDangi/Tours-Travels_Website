@@ -1,9 +1,9 @@
 import React from 'react'
-
-const ABookings = () => {
+import './Bookings.css'
+const Bookings = () => {
   return (
-    <div>Bookings</div>
+    <div className= 'bookings-container'>Bookings</div>
   )
 }
 
-export default ABookings
+export default Bookings

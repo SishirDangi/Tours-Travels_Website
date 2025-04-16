@@ -1,13 +1,9 @@
-import React from 'react';
-import './Booking.css';
+import React from 'react'
+
 const Booking = () => {
   return (
-    <>
-    <div className='booking-container'>
-      <div className='booking-heading'>Book this tour</div>
-    </div>
-    </>
+    <div>Booking</div>
   )
 }
 
-export default Booking;
+export default Booking

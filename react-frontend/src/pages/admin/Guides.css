@@ -1,0 +1,183 @@
+.guide-manager-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fdfdfb;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .guide-manager-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #b8860b;
+  }
+  
+  .guide-manager-form {
+    display: grid;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .guide-manager-field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .guide-manager-label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #333;
+  }
+  
+  .guide-manager-input {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  
+  .guide-manager-input:focus {
+    outline: none;
+    border-color: #b8860b;
+  }
+  
+  .guide-manager-language-box {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .guide-manager-button {
+    padding: 0.5rem 1rem;
+    background-color: #b8860b;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .guide-manager-button:hover {
+    background-color: #a37500;
+  }
+  
+  .guide-manager-languages-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .guide-manager-language {
+    background-color: #fff8e1;
+    color: #b8860b;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #b8860b;
+  }
+  
+  .guide-manager-submit {
+    padding: 0.75rem;
+    background-color: #b8860b;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .guide-manager-submit:hover {
+    background-color: #a37500;
+  }
+  
+  .guide-manager-subtitle {
+    font-size: 2.5rem;
+    color: #b8860b;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .enquiries-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .enquiries-table th,
+  .enquiries-table td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+  }
+  
+  .enquiries-table th {
+    background-color: #b8860b; /* Dark golden color */
+    color: white;
+    font-weight: bold;
+  }
+  
+  .enquiries-table tr:nth-child(even) {
+    background-color: #fff8e1;
+  }
+  
+  /* Removed hover effect from table rows */
+  
+  .enquiries-table button {
+    padding: 0.4rem 0.8rem;
+    margin-right: 0.4rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: white;
+    background-color: #388e3c;
+    transition: background-color 0.3s ease;
+  }
+  
+  .enquiries-table button:hover {
+    background-color: #2e7d32;
+  }
+  
+  .enquiries-table button:last-child {
+    background-color: #d32f2f;
+  }
+  
+  .enquiries-table button:last-child:hover {
+    background-color: #b71c1c;
+  }
+  
+  .guide-manager-search {
+    margin-bottom: 1rem;
+    text-align: right;
+  }
+  
+  .guide-manager-search input {
+    max-width: 300px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .guide-manager-form {
+      grid-template-columns: 1fr;
+    }
+  
+    .guide-manager-language-box {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  

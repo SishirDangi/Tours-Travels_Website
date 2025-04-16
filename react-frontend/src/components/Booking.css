@@ -1,9 +1,44 @@
-.booking-container{
-    background-color: #ffffff;
-}
-
-.booking-heading {
-   margin-top: 70px;
-   display: flex;
-   justify-content: center;
+.booking-page {
+    font-family: Arial, sans-serif;
   }
+  
+  .booking-hero {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  .booking-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .booking-hero .overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+    color: white;
+    padding: 1rem;
+  }
+  
+  .booking-hero .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+  }
+  
+  .booking-details-container {
+    padding: 2rem;
+  }
+  
+  .booking-details-container section {
+    margin-bottom: 2rem;
+  }
+  
+  .booking-details-container h2 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  

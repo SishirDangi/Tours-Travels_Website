@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Package;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\PackageDetail;
 class PackageController extends Controller
 {
     // Get all packages
@@ -132,4 +132,31 @@ class PackageController extends Controller
 
         return response()->json(['message' => 'Package deleted successfully'], Response::HTTP_OK);
     }
+
+    // Get the package detail for a specific package
+    public function getDetails($id)
+    {
+    try {
+        $detail = PackageDetail::with('package')->where('package_id', $id)->first();
+
+        if (!$detail) {
+            return response()->json(['message' => 'Package details not found.'], 404);
+        }
+
+        // Add image URL to package if exists
+        if ($detail->package && $detail->package->pkg_image_path) {
+            $detail->package->pkg_image_url = asset('storage/' . $detail->package->pkg_image_path);
+        }
+
+        return response()->json($detail, 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Error fetching package details.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+    }
+
+
+
 }

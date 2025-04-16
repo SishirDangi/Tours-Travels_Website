@@ -13,7 +13,7 @@ import TermsAndConditions from "../components/TermsAndConditions";
 import PrivacyPolicy from "../components/PrivacyPolicy";
 import UserDashboard from "../pages/user/UserDashboard";
 import Navbar from "../components/Navbar";
-
+import Destinations from "../components/Destinations";
 const UserRoutes = () => {
   return (
     <>
@@ -31,6 +31,7 @@ const UserRoutes = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/destinations" element={<Destinations />} />
 
       </Routes>
     </>

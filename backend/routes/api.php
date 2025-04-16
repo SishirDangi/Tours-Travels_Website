@@ -10,11 +10,18 @@ use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PackageDetailController;
+use App\Http\Controllers\GuideController;
+
+
+use App\Http\Controllers\ContactController;
+
+Route::get('/contact', [ContactController::class, 'getContact']);
 
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 Route::post('/register', [RegisterController::class, 'register']);
 Route::apiResource('bookings', BookingController::class);
 Route::apiResource('packages', PackageController::class);
+Route::get('/packages/{id}/details', [PackageController::class, 'getDetails']);
 
 Route::get('/statuses', function () {
     return Status::all();
@@ -43,3 +50,6 @@ Route::resource('users', UserController::class)->only([
 Route::post('/package-details/{packageId}', [PackageDetailController::class, 'store']);
 Route::get('/package-details/{packageId}', [PackageDetailController::class, 'show']);
 Route::delete('/package-details/{packageId}', [PackageDetailController::class, 'destroy']);
+
+
+Route::apiResource('guides', GuideController::class);
