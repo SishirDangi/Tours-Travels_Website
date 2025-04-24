@@ -10,6 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
+            $table->string('gender', 10);
             $table->string('mobile_no', 20)->unique();
             $table->string('email', 100)->unique();
             $table->text('address')->nullable();

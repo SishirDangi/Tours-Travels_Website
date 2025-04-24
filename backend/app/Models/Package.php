@@ -13,6 +13,7 @@ class Package extends Model
         'package_description',
         'package_type',
         'package_price',
+        'discount',
         'pkg_image_path',
         'duration',
         'status_id',

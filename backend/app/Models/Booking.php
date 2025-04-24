@@ -13,12 +13,12 @@ class Booking extends Model
 
     protected $fillable = [
         'booking_date',
-        'booking_time',
         'total_price',
-        'discount',
         'contact_id',
         'package_id',
         'status_id',
+        'payment_status_id',
+        'no_of_persons',
     ];
 
     public function contact()
@@ -34,5 +34,10 @@ class Booking extends Model
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function paymentStatus()
+    {
+        return $this->belongsTo(PaymentStatus::class);
     }
 }

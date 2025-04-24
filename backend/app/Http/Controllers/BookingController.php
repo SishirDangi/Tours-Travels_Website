@@ -2,95 +2,128 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Contact;
 use App\Models\Package;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
-    // Get all bookings
+    // Show all bookings
     public function index()
     {
-        return response()->json(Booking::all(), Response::HTTP_OK);
+        $bookings = Booking::with(['contact', 'package', 'status', 'paymentStatus'])->get();
+        return response()->json($bookings);
     }
 
-    // Create a new booking
+    // Store a new booking
     public function store(Request $request)
     {
-        // Validate the required fields
-        $request->validate([
-            'contact_id' => 'required|exists:contacts,id',
-            'package_id' => 'required|exists:packages,id',
-        ]);
+        try {
+            // Validate incoming request data
+            $validator = Validator::make($request->all(), [
+                'first_name' => 'required|string|max:100',
+                'last_name' => 'required|string|max:100',
+                'gender' => 'required|string|max:10',
+                'mobile_no' => 'required|string|max:20|unique:contacts,mobile_no',
+                'email' => 'required|string|email|max:100|unique:contacts,email',
+                'address' => 'nullable|string',
+                'country_id' => 'required|exists:countries,id',
+                'package_id' => 'required|exists:packages,id',
+                'no_of_persons' => 'required|integer|min:1',
+                'booking_date' => 'required|date|after_or_equal:today',
+            ]);
 
-        // Get the selected package
-        $package = Package::find($request->package_id);
-        if (!$package) {
-            return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            // Fetch package details
+            $package = Package::findOrFail($request->package_id);
+            $amount = $package->price;
+            $discount = $package->discount ?? 0;
+            $total_price = ($amount - $discount) * $request->no_of_persons;
+
+            // Create new contact
+            $contact = Contact::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'gender' => $request->gender,
+                'mobile_no' => $request->mobile_no,
+                'email' => $request->email,
+                'address' => $request->address,
+                'country_id' => $request->country_id,
+            ]);
+
+            // Create booking
+            $booking = Booking::create([
+                'booking_date' => Carbon::parse($request->booking_date),
+                'no_of_persons' => $request->no_of_persons,
+                'total_price' => $total_price,
+                'discount' => $discount,
+                'contact_id' => $contact->id,
+                'package_id' => $package->id,
+                'status_id' => null,
+                'payment_status_id' => null,
+            ]);
+
+            return response()->json([
+                'message' => 'Booking created successfully.',
+                'booking' => $booking,
+            ], 201);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => 'Server Error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        // Set current date and time for booking
-        $currentDateTime = now();
-
-        // Prepare booking data
-        $bookingData = [
-            'booking_date' => $currentDateTime->toDateString(),  // Store only date part
-            'booking_time' => $currentDateTime->toTimeString(),  // Store only time part
-            'total_price' => $package->package_price,  // Total price from the selected package
-            'discount' => null,  // Set discount as null initially
-            'contact_id' => $request->contact_id,  // Valid contact ID
-            'package_id' => $request->package_id,  // Valid package ID
-            'status_id' => 2,  // Status set to "2" (booked)
-        ];
-
-        // Create the booking
-        $booking = Booking::create($bookingData);
-
-        return response()->json($booking, Response::HTTP_CREATED);
     }
 
-    // Get a specific booking
+    // Show a specific booking
     public function show($id)
     {
-        $booking = Booking::find($id);
-        if (!$booking) {
-            return response()->json(['message' => 'Booking not found'], Response::HTTP_NOT_FOUND);
-        }
-        return response()->json($booking, Response::HTTP_OK);
+        $booking = Booking::with(['contact', 'package', 'status', 'paymentStatus'])->findOrFail($id);
+        return response()->json($booking);
     }
 
     // Update an existing booking
     public function update(Request $request, $id)
     {
-        $booking = Booking::find($id);
-        if (!$booking) {
-            return response()->json(['message' => 'Booking not found'], Response::HTTP_NOT_FOUND);
-        }
-
         $request->validate([
-            'booking_date' => 'sometimes|date',
-            'booking_time' => 'sometimes',
-            'total_price' => 'sometimes|numeric',
-            'discount' => 'sometimes|numeric',
-            'contact_id' => 'sometimes|exists:contacts,id',
-            'package_id' => 'sometimes|exists:packages,id',
-            'status_id' => 'sometimes|nullable|exists:statuses,id',
+            'booking_date' => 'required|date',
+            'total_price' => 'required|numeric',
+            'discount' => 'required|numeric',
+            'contact_id' => 'required|exists:contacts,id',
+            'package_id' => 'required|exists:packages,id',
+            'status_id' => 'nullable|exists:statuses,id',
+            'payment_status_id' => 'nullable|exists:payment_statuses,id',
+            'no_of_persons' => 'required|numeric',
         ]);
 
-        $booking->update($request->all());
-        return response()->json($booking, Response::HTTP_OK);
+        $booking = Booking::findOrFail($id);
+        $booking->update([
+            'booking_date' => $request->booking_date,
+            'total_price' => $request->total_price,
+            'discount' => $request->discount,
+            'contact_id' => $request->contact_id,
+            'package_id' => $request->package_id,
+            'status_id' => $request->status_id,
+            'payment_status_id' => $request->payment_status_id,
+            'no_of_persons' => $request->no_of_persons,
+        ]);
+
+        return response()->json($booking);
     }
 
     // Delete a booking
     public function destroy($id)
     {
-        $booking = Booking::find($id);
-        if (!$booking) {
-            return response()->json(['message' => 'Booking not found'], Response::HTTP_NOT_FOUND);
-        }
-
+        $booking = Booking::findOrFail($id);
         $booking->delete();
-        return response()->json(['message' => 'Booking deleted successfully'], Response::HTTP_OK);
+
+        return response()->json(['message' => 'Booking deleted successfully']);
     }
 }

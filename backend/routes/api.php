@@ -11,9 +11,10 @@ use App\Http\Controllers\OtpController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PackageDetailController;
 use App\Http\Controllers\GuideController;
-
-
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\PaymentStatusController;
+
 
 Route::get('/contact', [ContactController::class, 'getContact']);
 
@@ -53,3 +54,9 @@ Route::delete('/package-details/{packageId}', [PackageDetailController::class, '
 
 
 Route::apiResource('guides', GuideController::class);
+
+Route::get('/countries', [CountryController::class, 'index']);
+
+Route::get('contacts', [ContactController::class, 'index']);
+
+Route::get('payment-statuses', [PaymentStatusController::class, 'index']);

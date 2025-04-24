@@ -8,6 +8,7 @@ const Packages = () => {
     package_description: "",
     package_type: "",
     package_price: "",
+    discount: "", // New field
     duration: "",
     status_id: "",
     pkg_image: null,
@@ -91,6 +92,7 @@ const Packages = () => {
         package_description: "",
         package_type: "",
         package_price: "",
+        discount: "", // Reset discount
         duration: "",
         status_id: "",
         pkg_image: null,
@@ -115,6 +117,7 @@ const Packages = () => {
       package_description: pkg.package_description,
       package_type: pkg.package_type,
       package_price: pkg.package_price,
+      discount: pkg.discount || "", // Load discount
       duration: pkg.duration || "",
       status_id: pkg.status_id,
       pkg_image: null,
@@ -209,13 +212,26 @@ const Packages = () => {
           />
         </div>
         <div>
+          <label>Discount (%):</label>
+          <input
+            type="number"
+            name="discount"
+            value={formData.discount}
+            step="1"
+            min="0"
+            max="100"
+            onChange={handleChange}
+            placeholder="e.g., 10"
+          />
+        </div>
+        <div>
           <label>Duration:</label>
           <input
             type="text"
             name="duration"
             value={formData.duration}
             onChange={handleChange}
-            placeholder="e.g., 3 days, 1 week"
+            placeholder="e.g., 3D-5N"
           />
         </div>
         <div>
@@ -288,6 +304,8 @@ const Packages = () => {
             <th>Type</th>
             <th>Status</th>
             <th>Price</th>
+            <th>Discount</th>
+            <th>Total Price</th>
             <th>Duration</th>
             <th>Tour Category</th>
             <th>Action</th>
@@ -301,6 +319,12 @@ const Packages = () => {
               <td>{pkg.package_type}</td>
               <td>{getStatusName(pkg.status_id)}</td>
               <td>{pkg.package_price}</td>
+              <td>{pkg.discount ? `${pkg.discount}%` : "0%"}</td>
+              <td>
+                {pkg.discount
+                  ? (pkg.package_price - (pkg.package_price * pkg.discount) / 100).toFixed(2)
+                  : pkg.package_price}
+              </td>
               <td>{pkg.duration}</td>
               <td>{pkg.tour_category}</td>
               <td>

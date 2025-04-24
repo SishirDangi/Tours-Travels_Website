@@ -17,6 +17,13 @@ class PackageDetail extends Model
         'trip_highlights',
     ];
 
+    protected $casts = [
+        'cost_includes' => 'array',
+        'cost_excludes' => 'array',
+        'itinerary' => 'array',
+        'trip_highlights' => 'array',
+    ];
+
     public function package()
     {
         return $this->belongsTo(Package::class);

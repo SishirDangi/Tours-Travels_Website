@@ -9,17 +9,18 @@ return new class extends Migration {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->date('booking_date');
-            $table->time('booking_time');
+            $table->unsignedBigInteger('no_of_persons');
             $table->decimal('total_price', 10, 2);
-            $table->decimal('discount', 10, 2);
             $table->unsignedBigInteger('contact_id');
             $table->unsignedBigInteger('package_id');
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->unsignedBigInteger('payment_status_id')->nullable();
             $table->timestamps();
 
             $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
+            $table->foreign('payment_status_id')->references('id')->on('payment_statuses')->onDelete('set null');
         });
     }
 

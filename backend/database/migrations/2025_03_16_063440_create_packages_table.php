@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->text('package_description')->nullable();
             $table->string('package_type', 100);
             $table->decimal('package_price', 10, 2);
+            $table->decimal('discount', 10, 2)->default(0);
             $table->string('pkg_image_path');
             $table->string('duration')->nullable();
 

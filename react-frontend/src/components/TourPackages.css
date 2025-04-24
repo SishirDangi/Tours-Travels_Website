@@ -1,7 +1,8 @@
 /* Hero Section */
 .tourpackage-hero {
   position: relative;
-  height: 350px;
+  width: 100%;
+  height: 300px;
   overflow: hidden;
 }
 
@@ -19,195 +20,41 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .tourpackage-hero-title {
-  color: #fff;
-  font-size: 2.8rem;
+  color: white;
+  font-size: 3rem;
   font-weight: bold;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Container */
 .tourpackage-container {
-  padding: 30px 20px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 40px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #f8f8f8;
 }
 
-/* Search Input */
+/* Search Bar */
 .tourpackage-search {
-  text-align: center;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .tourpackage-search input {
-  width: 90%;
-  max-width: 450px;
-  padding: 12px 15px;
-  font-size: 1rem;
-  border-radius: 10px;
+  padding: 12px 20px;
+  width: 60%;
+  border-radius: 25px;
   border: 1px solid #ccc;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.tourpackage-search input:focus {
+  border-color: #cfa927;
   outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Grid Layout */
-.tourpackage-packages-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 per row on desktop */
-  gap: 25px;
-}
-
-/* Package Card */
-.tourpackage-package-card {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-}
-
-.tourpackage-package-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-/* Square image container */
-.tourpackage-image-container {
-  position: relative;
-  width: 100%;
-  padding-top: 100%; /* Makes it square */
-  overflow: hidden;
-}
-
-.tourpackage-package-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-/* Price tag on image */
-.tourpackage-price-tag {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: #ff6600;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-/* Package Info */
-.tourpackage-package-info {
-  padding: 15px 18px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.tourpackage-package-title {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.tourpackage-package-region {
-  color: #777;
-  font-size: 0.9rem;
-  margin-top: 6px;
-}
-
-/* Duration */
-.tourpackage-duration {
-  display: flex;
-  align-items: center;
-  margin-top: 12px;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.tourpackage-clock-icon {
-  margin-right: 6px;
-  color: #ff6600;
-  font-size: 1rem;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.pagination button {
-  padding: 8px 14px;
-  background-color: #f2f2f2;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease;
-  color: #333;
-}
-
-.pagination button:hover {
-  background-color: #ddd;
-}
-
-.pagination button.active {
-  background-color: #ff6600;
-  color: white;
-}
-
-/* Loading */
-.loading {
-  text-align: center;
-  margin-top: 50px;
-  padding: 50px 0;
-  font-size: 1.2rem;
-  color: #666;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 992px) {
-  .tourpackage-hero-title {
-    font-size: 2.2rem;
-  }
-
-  .tourpackage-packages-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 per row */
-  }
-
-  .tourpackage-search input {
-    width: 85%;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .tourpackage-hero-title {
-    font-size: 1.6rem;
-  }
-
-  .tourpackage-packages-grid {
-    grid-template-columns: 1fr; /* 1 per row */
-  }
-
-  .tourpackage-search input {
-    width: 95%;
-  }
 }

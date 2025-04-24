@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('package_id')->constrained()->onDelete('cascade');
             $table->text('main_information')->nullable();
-            $table->text('cost_includes')->nullable();
-            $table->text('cost_excludes')->nullable();
-            $table->text('itinerary')->nullable();
-            $table->text('trip_highlights')->nullable();
+            $table->json('cost_includes')->nullable();
+            $table->json('cost_excludes')->nullable();
+            $table->json('itinerary')->nullable();
+            $table->json('trip_highlights')->nullable();
             $table->timestamps();
         });
     }

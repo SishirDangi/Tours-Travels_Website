@@ -7,6 +7,7 @@ use App\Models\Package;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PackageDetail;
+
 class PackageController extends Controller
 {
     // Get all packages
@@ -41,6 +42,7 @@ class PackageController extends Controller
             'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_id' => 'required|exists:statuses,id',
             'tour_category' => 'nullable|string|max:255',  // Validate tour category
+            'discount' => 'nullable|numeric|min:0|max:100',  // Validate discount
         ]);
 
         $imagePath = null;
@@ -58,6 +60,7 @@ class PackageController extends Controller
             'pkg_image_path' => $imagePath,
             'status_id' => $validated['status_id'],
             'tour_category' => $validated['tour_category'] ?? null,  // Store tour category
+            'discount' => $validated['discount'] ?? null,  // Store discount
         ]);
 
         return response()->json($package, Response::HTTP_CREATED);
@@ -101,6 +104,7 @@ class PackageController extends Controller
             'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_id' => 'required|exists:statuses,id',
             'tour_category' => 'nullable|string|max:255',  // Validate tour category
+            'discount' => 'nullable|numeric|min:0|max:100',  // Validate discount
         ]);
 
         // Handle image upload if provided
@@ -136,27 +140,24 @@ class PackageController extends Controller
     // Get the package detail for a specific package
     public function getDetails($id)
     {
-    try {
-        $detail = PackageDetail::with('package')->where('package_id', $id)->first();
+        try {
+            $detail = PackageDetail::with('package')->where('package_id', $id)->first();
 
-        if (!$detail) {
-            return response()->json(['message' => 'Package details not found.'], 404);
+            if (!$detail) {
+                return response()->json(['message' => 'Package details not found.'], 404);
+            }
+
+            // Add image URL to package if exists
+            if ($detail->package && $detail->package->pkg_image_path) {
+                $detail->package->pkg_image_url = asset('storage/' . $detail->package->pkg_image_path);
+            }
+
+            return response()->json($detail, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching package details.',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        // Add image URL to package if exists
-        if ($detail->package && $detail->package->pkg_image_path) {
-            $detail->package->pkg_image_url = asset('storage/' . $detail->package->pkg_image_path);
-        }
-
-        return response()->json($detail, 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Error fetching package details.',
-            'error' => $e->getMessage()
-        ], 500);
     }
-    }
-
-
-
 }

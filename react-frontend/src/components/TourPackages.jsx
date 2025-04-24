@@ -34,7 +34,6 @@ const TourPackages = () => {
     )
     .sort((a, b) => a.package_name.localeCompare(b.package_name));
 
-  // Pagination Logic
   const indexOfLastPackage = currentPage * packagesPerPage;
   const indexOfFirstPackage = indexOfLastPackage - packagesPerPage;
   const currentPackages = filteredPackages.slice(indexOfFirstPackage, indexOfLastPackage);
@@ -52,7 +51,6 @@ const TourPackages = () => {
 
   return (
     <>
-      {/* Hero Section */}
       <div className="tourpackage-hero">
         <img src="/our-packages.jpg" alt="Hero" className="tourpackage-hero-image" />
         <div className="tourpackage-hero-overlay">
@@ -60,9 +58,7 @@ const TourPackages = () => {
         </div>
       </div>
 
-      {/* Main Section */}
       <div className="tourpackage-container">
-        {/* Search */}
         <div className="tourpackage-search">
           <input
             type="text"
@@ -75,7 +71,6 @@ const TourPackages = () => {
           />
         </div>
 
-        {/* Package Cards */}
         <div className="tourpackage-packages-grid">
           {currentPackages.map(pkg => (
             <div
@@ -89,11 +84,29 @@ const TourPackages = () => {
                   alt={pkg.package_name}
                   className="tourpackage-package-image"
                 />
-                <div className="tourpackage-price-tag">
-                  ${Number(pkg.package_price || 0).toFixed(2)}
-                </div>
+                {pkg.discount > 0 && (
+                  <div className="discount-badge">-{pkg.discount}%</div>
+                )}
               </div>
+
               <div className="tourpackage-package-info">
+                <div className="tourpackage-price-tag">
+                  {pkg.discount > 0 ? (
+                    <>
+                      <span className="original-price">
+                        Rs {Number(pkg.package_price).toLocaleString()}
+                      </span>
+                      <span className="discounted-price">
+                        Rs {Number(pkg.package_price * (1 - pkg.discount / 100)).toLocaleString()}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="discounted-price">
+                      Rs {Number(pkg.package_price).toLocaleString()}
+                    </span>
+                  )}
+                </div>
+
                 <h3 className="tourpackage-package-title">{pkg.package_name}</h3>
                 <p className="tourpackage-package-region">{pkg.package_type}</p>
                 <div className="tourpackage-duration">
@@ -105,7 +118,6 @@ const TourPackages = () => {
           ))}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             {[...Array(totalPages)].map((_, index) => (

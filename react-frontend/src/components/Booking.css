@@ -1,44 +1,54 @@
-.booking-page {
-    font-family: Arial, sans-serif;
+.booking-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f8f8f8;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
   }
   
-  .booking-hero {
-    position: relative;
-    height: 300px;
-    overflow: hidden;
+  .booking-title {
+    text-align: center;
+    margin-bottom: 20px;
   }
   
-  .booking-hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .form-group {
+    margin-bottom: 15px;
   }
   
-  .booking-hero .overlay {
-    position: absolute;
-    bottom: 0;
-    background: rgba(0,0,0,0.6);
-    width: 100%;
-    color: white;
-    padding: 1rem;
-  }
-  
-  .booking-hero .price {
-    font-size: 1.2rem;
+  label {
+    display: block;
     font-weight: bold;
-    margin-top: 0.5rem;
+    margin-bottom: 5px;
   }
   
-  .booking-details-container {
-    padding: 2rem;
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
   
-  .booking-details-container section {
-    margin-bottom: 2rem;
+  .book-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
-  .booking-details-container h2 {
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
+  .success-msg {
+    color: green;
+    text-align: center;
+  }
+  
+  .error-msg {
+    color: red;
+    text-align: center;
   }
   
