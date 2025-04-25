@@ -187,7 +187,7 @@ const Booking = () => {
             <option value="">Select Country</option>
             {countries.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.country_name} ({c.country_code}, {c.phone_code})
+                {c.country_name} 
               </option>
             ))}
           </select>
