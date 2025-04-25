@@ -9,6 +9,8 @@ return new class extends Migration {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->date('booking_date');
+            $table->date('tour_date')->nullable();
+            $table->string('booking_code')->unique();
             $table->unsignedBigInteger('no_of_persons');
             $table->decimal('total_price', 10, 2);
             $table->unsignedBigInteger('contact_id');

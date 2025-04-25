@@ -11,6 +11,7 @@ class Contact extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'gender',
         'mobile_no',
         'email',
         'address',
@@ -21,5 +22,5 @@ class Contact extends Model
     {
         return $this->belongsTo(Country::class);
     }
-    
+
 }

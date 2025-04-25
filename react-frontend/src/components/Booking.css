@@ -1,54 +1,124 @@
 .booking-wrapper {
-    max-width: 600px;
-    margin: 0 auto;
-    background: #f8f8f8;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 70px auto auto auto;
+  flex-wrap: wrap;
+}
+
+.booking-title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.booking-form {
+  flex: 1;
+  max-width: 500px;
+  background: #fdfdfd;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.price-display {
+  background: #eef4ff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: #2d3e50;
+  font-weight: 600;
+}
+
+.book-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #2ecc71;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.book-btn:hover {
+  background-color: #27ae60;
+}
+
+.success-msg,
+.error-msg {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.success-msg {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.error-msg {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* ===== Left side (Package details) ===== */
+.package-info {
+  flex: 1;
+  min-width: 300px;
+  background-color: #f6f8fa;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.package-info h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.package-info p {
+  margin: 8px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
+  .booking-wrapper {
+    flex-direction: column;
+    padding: 20px;
   }
-  
-  .booking-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  input,
-  select,
-  textarea {
+
+  .booking-form,
+  .package-info {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
   }
-  
-  .book-btn {
-    background-color: #e74c3c;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    width: 100%;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .success-msg {
-    color: green;
-    text-align: center;
-  }
-  
-  .error-msg {
-    color: red;
-    text-align: center;
-  }
-  
+}

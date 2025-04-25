@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import DashboardHome from "../pages/admin/DashboardHome";
-import Bookings from "../pages/admin/Bookings";
+import BookingDetails from "../pages/admin/BookingDetails";
 import Packages from "../pages/admin/Packages";
 import PackageDetails from "../pages/admin/PackageDetails";
 import Enquiries from "../pages/admin/Enquiries";
@@ -16,7 +16,7 @@ const AdminRoutes = () => {
     <Routes>
       <Route path="/" element={<AdminDashboard />}>
         <Route path="dashboard" element={<DashboardHome />} />
-        <Route path="bookings" element={<Bookings />} />
+        <Route path="bookings" element={<BookingDetails />} />
         <Route path="packages" element={<Packages/>} />
         <Route path="/package-details" element={<PackageDetails/>} />
         <Route path="enquiries" element={<Enquiries/>} />
