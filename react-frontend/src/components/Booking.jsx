@@ -22,6 +22,7 @@ const Booking = () => {
   const [packages, setPackages] = useState([]);
   const [phoneCode, setPhoneCode] = useState("");
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedPackageDetail, setSelectedPackageDetail] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -33,6 +34,7 @@ const Booking = () => {
   useEffect(() => {
     if (formData.package_id) {
       calculateTotalPrice(formData.package_id, formData.no_of_persons);
+      fetchPackageDetail(formData.package_id);
     }
   }, [formData.package_id, formData.no_of_persons]);
 
@@ -54,9 +56,20 @@ const Booking = () => {
         const defaultPackageId = defaultPackage.id.toString();
         setFormData((prev) => ({ ...prev, package_id: defaultPackageId }));
         calculateTotalPrice(defaultPackageId, formData.no_of_persons);
+        fetchPackageDetail(defaultPackageId);
       }
     } catch (err) {
       console.error("Error fetching packages:", err);
+    }
+  };
+
+  const fetchPackageDetail = async (pkgId) => {
+    try {
+      const res = await axios.get(`http://localhost:8001/api/package-details/${pkgId}`);
+      setSelectedPackageDetail(res.data);
+    } catch (err) {
+      console.error("Error fetching package details:", err);
+      setSelectedPackageDetail(null);
     }
   };
 
@@ -121,6 +134,7 @@ const Booking = () => {
       });
       setPhoneCode("");
       setSelectedPackage(null);
+      setSelectedPackageDetail(null);
     } catch (err) {
       if (err.response?.data?.errors) {
         setError("Validation error: " + JSON.stringify(err.response.data.errors));
@@ -131,109 +145,161 @@ const Booking = () => {
   };
 
   return (
-    <div className="booking-wrapper">
+    <div className="booking-container">
       <h2 className="booking-title">Book This Tour</h2>
 
-      {/* Left side: Package Info */}
-      <div className="package-info">
-        <h3>Package Details</h3>
-        {selectedPackage ? (
-          <>
-            <p><strong>Package Name:</strong> {selectedPackage.package_name}</p>
-            <p><strong>Type:</strong> {selectedPackage.package_type}</p>
-            <p><strong>Price:</strong> NPR {selectedPackage.package_price}</p>
-            <p><strong>Discount:</strong> {selectedPackage.discount || 0}%</p>
-            <p><strong>Total Price:</strong> NPR {selectedPackage.total_price}</p>
-            <p><strong>Highlights:</strong> {selectedPackage.trip_highlights}</p>
-            <p><strong>Itinerary:</strong> {selectedPackage.itinerary}</p>
-          </>
-        ) : (
-          <p>Select a package to view details.</p>
-        )}
-      </div>
+      <div className="booking-content">
+        {/* Left: Package Details */}
+        <div className="package-info">
+          <h3>Package Information</h3>
+          {selectedPackageDetail ? (
+            <div className="package-details">
+              {selectedPackageDetail.main_information && (
+                <>
+                  <h4>Main Information</h4>
+                  <p>{selectedPackageDetail.main_information}</p>
+                </>
+              )}
 
-      {/* Right side: Booking Form */}
-      <form onSubmit={handleSubmit} className="booking-form">
-        {message && <div className="success-msg">{message}</div>}
-        {error && <div className="error-msg">{error}</div>}
+              {selectedPackageDetail.trip_highlights?.length > 0 && (
+                <>
+                  <h4>Trip Highlights</h4>
+                  {selectedPackageDetail.trip_highlights.map((highlight, index) => (
+                    <p key={index}>{highlight}</p>
+                  ))}
+                </>
+              )}
 
-        <div className="form-group">
-          <label>First Name:</label>
-          <input name="first_name" value={formData.first_name} onChange={handleChange} required />
+              {selectedPackageDetail.itinerary?.length > 0 && (
+                <>
+                  <h4>Itinerary</h4>
+                  {selectedPackageDetail.itinerary.map((item, index) => (
+                    <p key={index}>Day {index + 1}: {item}</p>
+                  ))}
+                </>
+              )}
+
+              {selectedPackageDetail.cost_includes?.length > 0 && (
+                <>
+                  <h4>Cost Includes</h4>
+                  {selectedPackageDetail.cost_includes.map((item, index) => (
+                    <p key={index}>{item}</p>
+                  ))}
+                </>
+              )}
+
+              {selectedPackageDetail.cost_excludes?.length > 0 && (
+                <>
+                  <h4>Cost Excludes</h4>
+                  {selectedPackageDetail.cost_excludes.map((item, index) => (
+                    <p key={index}>{item}</p>
+                  ))}
+                </>
+              )}
+            </div>
+          ) : (
+            <p>Package details not available.</p>
+          )}
         </div>
 
-        <div className="form-group">
-          <label>Last Name:</label>
-          <input name="last_name" value={formData.last_name} onChange={handleChange} required />
-        </div>
+        {/* Right: Booking Form */}
+        <form onSubmit={handleSubmit} className="booking-form">
+          {message && <div className="success-msg">{message}</div>}
+          {error && <div className="error-msg">{error}</div>}
 
-        <div className="form-group">
-          <label>Gender:</label>
-          <select name="gender" value={formData.gender} onChange={handleChange} required>
-            <option value="">Select Gender</option>
-            <option>Male</option>
-            <option>Female</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Email:</label>
-          <input name="email" type="email" value={formData.email} onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label>Country:</label>
-          <select name="country_id" value={formData.country_id} onChange={handleChange} required>
-            <option value="">Select Country</option>
-            {countries.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.country_name} 
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Mobile No:</label>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ minWidth: "60px" }}>{phoneCode}</span>
-            <input name="mobile_no" value={formData.mobile_no} onChange={handleChange} placeholder="Enter mobile number" />
+          <div className="form-group">
+            <label>First Name:</label>
+            <input name="first_name" value={formData.first_name} onChange={handleChange} required />
           </div>
-        </div>
 
-        <div className="form-group">
-          <label>Address:</label>
-          <input name="address" value={formData.address} onChange={handleChange} />
-        </div>
+          <div className="form-group">
+            <label>Last Name:</label>
+            <input name="last_name" value={formData.last_name} onChange={handleChange} required />
+          </div>
 
-        <div className="form-group">
-          <label>Package:</label>
-          <select name="package_id" value={formData.package_id} onChange={handleChange} required>
-            <option value="">Select Package</option>
-            {packages.map((pkg) => (
-              <option key={pkg.id} value={pkg.id}>
-                {pkg.package_name}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="form-group">
+            <label>Gender:</label>
+            <select name="gender" value={formData.gender} onChange={handleChange} required>
+              <option value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
 
-        {selectedPackage && (
-          <>
-            <div className="form-group">
-              <label>Tour Date:</label>
-              <input name="tour_date" type="date" value={formData.tour_date} onChange={handleChange} required />
+          <div className="form-group">
+            <label>Email:</label>
+            <input name="email" type="email" value={formData.email} onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label>Country:</label>
+            <select name="country_id" value={formData.country_id} onChange={handleChange} required>
+              <option value="">Select Country</option>
+              {countries.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.country_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Mobile No:</label>
+            <div className="mobile-input">
+              <span>{phoneCode}</span>
+              <input name="mobile_no" value={formData.mobile_no} onChange={handleChange} placeholder="Enter mobile number" />
             </div>
+          </div>
 
-            <div className="form-group">
-              <label>No. of Persons:</label>
-              <input type="number" name="no_of_persons" value={formData.no_of_persons} min="1" onChange={handleChange} />
-            </div>
-          </>
-        )}
+          <div className="form-group">
+            <label>Address:</label>
+            <input name="address" value={formData.address} onChange={handleChange} />
+          </div>
 
-        <button type="submit" className="book-btn">Book Now</button>
-      </form>
+          <div className="form-group">
+            <label>Package:</label>
+            <select name="package_id" value={formData.package_id} onChange={handleChange} required>
+              <option value="">Select Package</option>
+              {packages.map((pkg) => (
+                <option key={pkg.id} value={pkg.id}>
+                  {pkg.package_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {selectedPackage && (
+            <>
+              <div className="form-group">
+                <label>Tour Date:</label>
+                <input name="tour_date" type="date" value={formData.tour_date} onChange={handleChange} required />
+              </div>
+
+              <div className="form-group">
+                <label>No. of Persons:</label>
+                <input type="number" name="no_of_persons" value={formData.no_of_persons} min="1" onChange={handleChange} />
+              </div>
+
+              <div className="form-group">
+                <label>Price:</label>
+                <input type="text" value={`NPR ${selectedPackage.package_price}`} disabled />
+              </div>
+
+              <div className="form-group">
+                <label>Discount:</label>
+                <input type="text" value={`${selectedPackage.discount || 0}%`} disabled />
+              </div>
+
+              <div className="form-group">
+                <label>Total Price:</label>
+                <input type="text" value={`NPR ${selectedPackage.total_price}`} disabled />
+              </div>
+            </>
+          )}
+
+          <button type="submit" className="book-btn">Book Now</button>
+        </form>
+      </div>
     </div>
   );
 };

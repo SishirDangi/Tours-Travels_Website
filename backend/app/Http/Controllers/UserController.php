@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // 🧾 Get all users with contact and role info
+    // Get all users with contact and role info
     public function index()
     {
         $users = User::with(['contact', 'role'])->get();
         return response()->json($users);
     }
 
-    // ✏️ Update a user (contact info or password)
+    // Update a user (contact info or password)
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -49,7 +49,7 @@ class UserController extends Controller
         return response()->json(['message' => 'User updated successfully.']);
     }
 
-    // ❌ Delete a user and associated contact
+    // Delete a user and associated contact
     public function destroy($id)
     {
         $user = User::findOrFail($id);

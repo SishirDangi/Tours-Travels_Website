@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Package;
@@ -18,24 +17,24 @@ class PackageDetailController extends Controller
         }
 
         // Validate input
-        $request->validate([
+        $validated = $request->validate([
             'main_information' => 'required|string',
-            'cost_includes' => 'nullable|string',
-            'cost_excludes' => 'nullable|string',
-            'itinerary' => 'nullable|string',
-            'trip_highlights' => 'nullable|string',
+            'cost_includes' => 'nullable|array',
+            'cost_excludes' => 'nullable|array',
+            'itinerary' => 'nullable|array',
+            'trip_highlights' => 'nullable|array',
         ]);
 
         // Create or update the package detail
         $packageDetail = PackageDetail::updateOrCreate(
             ['package_id' => $packageId],
-            $request->only([
-                'main_information',
-                'cost_includes',
-                'cost_excludes',
-                'itinerary',
-                'trip_highlights'
-            ])
+            [
+                'main_information' => $validated['main_information'],
+                'cost_includes' => $validated['cost_includes'] ?? [],
+                'cost_excludes' => $validated['cost_excludes'] ?? [],
+                'itinerary' => $validated['itinerary'] ?? [],
+                'trip_highlights' => $validated['trip_highlights'] ?? [],
+            ]
         );
 
         return response()->json($packageDetail, 200);
