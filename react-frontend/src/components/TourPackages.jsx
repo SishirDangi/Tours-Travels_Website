@@ -40,7 +40,8 @@ const TourPackages = () => {
   const totalPages = Math.ceil(filteredPackages.length / packagesPerPage);
 
   const handlePackageClick = (pkg) => {
-    navigate('/booking', { state: { package: pkg } });
+    // Navigate to the booking page with the package_id in the URL
+    navigate(`/booking/${pkg.id}`);
   };
 
   const handlePageChange = (page) => {

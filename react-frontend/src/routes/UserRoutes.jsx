@@ -23,7 +23,7 @@ const UserRoutes = () => {
         <Route path="/packages" element={<TourPackages />} />
         <Route path="/enquiry" element={<EnquiryNow />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/booking" element={<Booking />} />
+        <Route path="/booking/:package_id" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/bookingpolicy" element={<BookingPolicy />} />

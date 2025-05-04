@@ -40,8 +40,8 @@ const Booking = () => {
 
   const fetchCountries = async () => {
     try {
-      const response = await axios.get("http://localhost:8001/api/countries");
-      setCountries(response.data);
+      const res = await axios.get("http://localhost:8001/api/countries");
+      setCountries(res.data);
     } catch (err) {
       console.error("Error fetching countries:", err);
     }
@@ -49,14 +49,12 @@ const Booking = () => {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get("http://localhost:8001/api/packages");
-      setPackages(response.data);
-      if (response.data.length > 0) {
-        const defaultPackage = response.data[0];
+      const res = await axios.get("http://localhost:8001/api/packages");
+      setPackages(res.data);
+      if (res.data.length > 0) {
+        const defaultPackage = res.data[0];
         const defaultPackageId = defaultPackage.id.toString();
         setFormData((prev) => ({ ...prev, package_id: defaultPackageId }));
-        calculateTotalPrice(defaultPackageId, formData.no_of_persons);
-        fetchPackageDetail(defaultPackageId);
       }
     } catch (err) {
       console.error("Error fetching packages:", err);
@@ -74,18 +72,18 @@ const Booking = () => {
   };
 
   const calculateTotalPrice = (pkgId, persons) => {
-    const selected = packages.find((p) => p.id.toString() === pkgId);
+    const selected = packages.find((pkg) => pkg.id.toString() === pkgId);
     if (!selected) return;
 
     const price = selected.package_price;
-    const discountPercent = selected.discount || 0;
-    const discountedPrice = price - (price * discountPercent) / 100;
+    const discount = selected.discount || 0;
+    const discountedPrice = price - (price * discount) / 100;
     const total = discountedPrice * (parseInt(persons) || 1);
 
     setSelectedPackage({
       ...selected,
       total_price: total.toFixed(2),
-      discount_percent: discountPercent,
+      discount_percent: discount,
     });
 
     setFormData((prev) => ({
@@ -96,12 +94,14 @@ const Booking = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };
-    setFormData(updatedFormData);
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
     if (name === "country_id") {
-      const selected = countries.find((c) => c.id.toString() === value);
-      setPhoneCode(selected ? selected.phone_code : "");
+      const selectedCountry = countries.find((c) => c.id.toString() === value);
+      setPhoneCode(selectedCountry?.phone_code || "");
     }
   };
 
@@ -110,46 +110,57 @@ const Booking = () => {
     setMessage("");
     setError("");
 
-    const updatedFormData = {
+    const submissionData = {
       ...formData,
       booking_date: new Date().toISOString().split("T")[0],
     };
 
     try {
-      const res = await axios.post("http://localhost:8001/api/bookings", updatedFormData);
-      setMessage(res.data.message);
-      setFormData({
-        first_name: "",
-        last_name: "",
-        gender: "",
-        email: "",
-        country_id: "",
-        mobile_no: "",
-        address: "",
-        package_id: "",
-        booking_date: "",
-        tour_date: "",
-        no_of_persons: 1,
-        total_price: 0,
-      });
-      setPhoneCode("");
-      setSelectedPackage(null);
-      setSelectedPackageDetail(null);
+      const res = await axios.post("http://localhost:8001/api/bookings", submissionData);
+      setMessage(res.data.message || "Booking successful!");
+      resetForm();
     } catch (err) {
       if (err.response?.data?.errors) {
         setError("Validation error: " + JSON.stringify(err.response.data.errors));
       } else {
-        setError("Something went wrong while booking.");
+        setError("An error occurred while booking.");
       }
     }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      first_name: "",
+      last_name: "",
+      gender: "",
+      email: "",
+      country_id: "",
+      mobile_no: "",
+      address: "",
+      package_id: "",
+      booking_date: "",
+      tour_date: "",
+      no_of_persons: 1,
+      total_price: 0,
+    });
+    setPhoneCode("");
+    setSelectedPackage(null);
+    setSelectedPackageDetail(null);
   };
 
   return (
     <div className="booking-container">
       <h2 className="booking-title">Book This Tour</h2>
+      <div>
+        <img
+          src={selectedPackage?.pkg_image_url || "default-image.jpg"}
+          alt={selectedPackage?.package_name || " "}
+          className="tourpackage-package-image"
+        />
+      </div>
 
       <div className="booking-content">
-        {/* Left: Package Details */}
+        {/* Left Side - Package Details */}
         <div className="package-info">
           <h3>Package Information</h3>
           {selectedPackageDetail ? (
@@ -198,11 +209,11 @@ const Booking = () => {
               )}
             </div>
           ) : (
-            <p>Package details not available.</p>
+            <p> </p>
           )}
         </div>
 
-        {/* Right: Booking Form */}
+        {/* Right Side - Booking Form */}
         <form onSubmit={handleSubmit} className="booking-form">
           {message && <div className="success-msg">{message}</div>}
           {error && <div className="error-msg">{error}</div>}
@@ -221,8 +232,8 @@ const Booking = () => {
             <label>Gender:</label>
             <select name="gender" value={formData.gender} onChange={handleChange} required>
               <option value="">Select Gender</option>
-              <option>Male</option>
-              <option>Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
           </div>
 

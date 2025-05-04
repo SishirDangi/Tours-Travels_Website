@@ -1,6 +1,8 @@
+/* Booking Page CSS */
 .booking-container {
   padding: 20px;
   margin-top: 60px;
+  text-align: center; /* Center the text and image */
 }
 
 .booking-title {
@@ -11,13 +13,26 @@
   color: #333;
 }
 
+/* Package Image Styling */
+.tourpackage-package-image {
+  width: 100%; /* Ensure the image takes full width of the container */
+  height: 40vh; /* Adjust height as needed (40% of the viewport height) */
+  object-fit: cover; /* Maintain aspect ratio while covering the area */
+  margin: 0;
+  display: block; /* Ensure it spans the entire width */
+}
+
+/* Booking Content (Form + Package Info) */
 .booking-content {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 20px;
+  max-width: 100%; /* Ensures no horizontal overflow */
 }
 
+/* Package Info and Booking Form Styling */
 .package-info,
 .booking-form {
   flex: 1;
@@ -27,6 +42,7 @@
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: left; /* Align inner text left inside cards */
 }
 
 .package-info h3,
@@ -47,6 +63,7 @@
   color: #b8860b; /* Dark golden color */
 }
 
+/* Form Groups */
 .form-group {
   margin-bottom: 20px;
 }
@@ -70,10 +87,11 @@
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #b8860b; /* Dark golden color on focus */
+  border-color: #b8860b; /* Highlight input on focus */
   outline: none;
 }
 
+/* Mobile Input Special Styling */
 .mobile-input {
   display: flex;
   align-items: center;
@@ -89,6 +107,7 @@
   text-align: center;
 }
 
+/* Success and Error Messages */
 .success-msg {
   color: green;
   margin-bottom: 15px;
@@ -101,8 +120,9 @@
   font-weight: bold;
 }
 
+/* Booking Button */
 .book-btn {
-  background-color: #b8860b; /* Dark golden background */
+  background-color: #b8860b; /* Dark golden */
   color: white;
   padding: 12px 20px;
   border: none;
@@ -115,10 +135,10 @@
 }
 
 .book-btn:hover {
-  background-color: #a6760a; /* Slightly darker golden on hover */
+  background-color: #a6760a;
 }
 
-/* Responsive */
+/* Responsive Behavior */
 @media (max-width: 768px) {
   .booking-content {
     flex-direction: column;

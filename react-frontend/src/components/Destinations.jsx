@@ -10,6 +10,7 @@ const Destinations = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null); // State to handle errors
   const packagesPerPage = 9;
   const navigate = useNavigate();
 
@@ -24,7 +25,10 @@ const Destinations = () => {
         ].filter((category) => category);
         setCategories(uniqueCategories);
       })
-      .catch((err) => console.error("Error fetching packages:", err));
+      .catch((err) => {
+        console.error("Error fetching packages:", err);
+        setError("Failed to load packages. Please try again later."); // Set error message
+      });
   }, []);
 
   const filteredPackages =
@@ -38,7 +42,7 @@ const Destinations = () => {
   const totalPages = Math.ceil(filteredPackages.length / packagesPerPage);
 
   const handlePackageClick = (pkg) => {
-    navigate("/booking", { state: { package: pkg } });
+    navigate(`/booking/${pkg.id}`, { state: { package: pkg } });
   };
 
   const handlePageChange = (page) => {
@@ -91,51 +95,57 @@ const Destinations = () => {
 
           {/* Packages Grid */}
           <div className="tourpackage-packages-grid">
-            {currentPackages.map((pkg) => (
-              <div
-                key={pkg.id}
-                className="tourpackage-package-card"
-                onClick={() => handlePackageClick(pkg)}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="tourpackage-image-container">
-                  <img
-                    src={pkg.pkg_image_url}
-                    alt={pkg.package_name}
-                    className="tourpackage-package-image"
-                    loading="lazy"
-                  />
-                  {pkg.discount > 0 && (
-                    <div className="discount-badge">-{pkg.discount}%</div>
-                  )}
-                  <div className="tourpackage-price-tag">
-                    {pkg.discount > 0 ? (
-                      <>
-                        <span className="original-price">
-                          ${Number(pkg.package_price).toFixed(2)}
-                        </span>
-                        <span className="discounted-price">
-                          ${Number(pkg.package_price * (1 - pkg.discount / 100)).toFixed(2)}
-                        </span>
-                      </>
-                    ) : (
-                      <span className="discounted-price">
-                        ${Number(pkg.package_price || 0).toFixed(2)}
-                      </span>
+            {error ? (
+              <p className="error-message">{error}</p> // Display error message
+            ) : currentPackages.length === 0 ? (
+              <p>No packages available in this category.</p> // Empty state
+            ) : (
+              currentPackages.map((pkg) => (
+                <div
+                  key={pkg.id}
+                  className="tourpackage-package-card"
+                  onClick={() => handlePackageClick(pkg)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="tourpackage-image-container">
+                    <img
+                      src={pkg.pkg_image_url}
+                      alt={pkg.package_name}
+                      className="tourpackage-package-image"
+                      loading="lazy"
+                    />
+                    {pkg.discount > 0 && (
+                      <div className="discount-badge">-{pkg.discount}%</div>
                     )}
+                    <div className="tourpackage-price-tag">
+                      {pkg.discount > 0 ? (
+                        <>
+                          <span className="original-price">
+                            ${Number(pkg.package_price).toFixed(2)}
+                          </span>
+                          <span className="discounted-price">
+                            ${Number(pkg.package_price * (1 - pkg.discount / 100)).toFixed(2)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="discounted-price">
+                          ${Number(pkg.package_price || 0).toFixed(2)}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className="tourpackage-package-info">
-                  <h3 className="tourpackage-package-title">{pkg.package_name}</h3>
-                  <p className="tourpackage-package-region">{pkg.tour_category}</p>
-                  <div className="tourpackage-duration">
-                    <FaClock className="tourpackage-clock-icon" />
-                    <span>{pkg.duration || 'N/A'}</span>
+                  <div className="tourpackage-package-info">
+                    <h3 className="tourpackage-package-title">{pkg.package_name}</h3>
+                    <p className="tourpackage-package-region">{pkg.tour_category}</p>
+                    <div className="tourpackage-duration">
+                      <FaClock className="tourpackage-clock-icon" />
+                      <span>{pkg.duration || 'N/A'}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Pagination */}

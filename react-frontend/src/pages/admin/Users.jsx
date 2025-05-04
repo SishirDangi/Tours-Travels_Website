@@ -13,6 +13,8 @@ const Users = () => {
     mobile_no: ''
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Number of users per page
 
   useEffect(() => {
     // Fetch all users
@@ -33,8 +35,10 @@ const Users = () => {
       `${user.contact.first_name} ${user.contact.last_name}`.toLowerCase().includes(event.target.value.toLowerCase())
     );
     setFilteredUsers(filtered);
+    setCurrentPage(1); // Reset to page 1 when search query changes
   };
 
+  // Handle edit user
   const handleEdit = (user) => {
     setEditingUser(user.id);
     setUserData({
@@ -45,6 +49,7 @@ const Users = () => {
     });
   };
 
+  // Handle delete user
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       axios.delete(`http://localhost:8001/api/users/${id}`)
@@ -59,6 +64,7 @@ const Users = () => {
     }
   };
 
+  // Handle update user
   const handleUpdate = () => {
     if (!editingUser) return;
 
@@ -87,6 +93,17 @@ const Users = () => {
       });
   };
 
+  // Paginate the users data based on current page and items per page
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Handle page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
   return (
     <div className="container">
       <h2 className="title">Manage Users</h2>
@@ -113,9 +130,9 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((user, index) => (
+          {currentUsers.map((user, index) => (
             <tr key={user.id}>
-              <td>{index + 1}</td>
+              <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
               <td>{user.contact.first_name} {user.contact.last_name}</td>
               <td>{user.contact.email}</td>
               <td>{user.contact.mobile_no}</td>
@@ -127,6 +144,31 @@ const Users = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="pagination">
+        <button 
+          onClick={() => paginate(currentPage - 1)} 
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        {[...Array(totalPages)].map((_, index) => (
+          <button 
+            key={index + 1} 
+            onClick={() => paginate(index + 1)} 
+            className={currentPage === index + 1 ? 'active' : ''}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button 
+          onClick={() => paginate(currentPage + 1)} 
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
 
       {/* Edit User Modal */}
       {editingUser && (
