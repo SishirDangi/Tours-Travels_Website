@@ -9,7 +9,7 @@ class StatusSeeder extends Seeder
 {
     public function run()
     {
-        $statuses = ['active', 'booked', 'booking', 'inactive', 'pending', 'resolved', 'cancelled', 'approved'];
+        $statuses = ['active', 'booked', 'booking', 'inactive', 'pending', 'resolved', 'cancelled', 'approved', 'deactivate', 'completed'];
 
         foreach ($statuses as $status) {
             DB::table('statuses')->insert([

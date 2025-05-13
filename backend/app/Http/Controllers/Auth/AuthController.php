@@ -1,30 +1,30 @@
 <?php
 namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Contact;
-use App\Models\Role;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
+    // Unified login method for user/admin
     public function login(Request $request)
     {
-        // Validate input
         $validator = Validator::make($request->all(), [
             'email'    => 'required|email',
             'password' => 'required',
-            'role'     => 'required|in:user,admin'
+            'role'     => 'required|in:user,admin',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['status' => 'validation_error', 'errors' => $validator->errors()], 422);
+            return response()->json([
+                'status' => 'validation_error',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        // Fetch user based on email and role
+        // Find user with matching email and role
         $user = User::with(['contact', 'role'])
             ->whereHas('contact', function ($query) use ($request) {
                 $query->where('email', $request->email);
@@ -35,27 +35,88 @@ class AuthController extends Controller
             ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['status' => 'error', 'message' => 'Invalid credentials'], 401);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid credentials'
+            ], 401);
         }
 
         // Update last login timestamp
         $user->last_logged_in = now();
         $user->save();
 
-        // Create token
+        // Generate Sanctum token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'status' => 'success',
             'message' => 'Login successful',
             'user' => [
-                'id' => $user->id,
-                'name' => $user->contact->first_name . ' ' . $user->contact->last_name,
-                'email' => $user->contact->email,
-                'role' => $user->role->role_name,
+                'id'    => $user->id,
+                'name'  => trim(optional($user->contact)->first_name . ' ' . optional($user->contact)->last_name),
+                'email' => optional($user->contact)->email,
+                'role'  => optional($user->role)->role_name,
             ],
             'access_token' => $token,
-            'token_type' => 'Bearer',
+            'token_type'   => 'Bearer',
+        ]);
+    }
+
+    // Logout method
+    public function logout(Request $request)
+    {
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ]);
+    }
+
+    // Get authenticated user info
+    public function getUser(Request $request)
+    {
+        $user = $request->user()->load(['contact', 'role']);
+
+        return response()->json([
+            'id'    => $user->id,
+            'name'  => trim(optional($user->contact)->first_name . ' ' . optional($user->contact)->last_name),
+            'email' => optional($user->contact)->email,
+            'role'  => optional($user->role)->role_name,
+        ]);
+    }
+
+    // Admin Dashboard data (can also be used as protected route)
+    public function dashboard(Request $request)
+    {
+        $user = $request->user()->load(['role']);
+
+        if ($user->role->role_name !== 'admin') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized. Only admins can access this resource.',
+            ], 403);
+        }
+
+        // Example stats, adjust as needed
+        $totalUsers = \App\Models\User::count();
+        $totalBookings = \App\Models\Booking::count();
+        $newBookings = \App\Models\Booking::where('created_at', '>=', now()->subDays(30))->count();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Admin Dashboard',
+            'admin' => [
+                'name' => $user->name,
+                'role' => $user->role->role_name,
+            ],
+            'statistics' => [
+                'totalUsers' => $totalUsers,
+                'totalBookings' => $totalBookings,
+                'newBookings' => $newBookings,
+            ],
         ]);
     }
 }

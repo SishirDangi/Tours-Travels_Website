@@ -1,8 +1,85 @@
-.login-container {
-    max-width: 400px;
-    margin: 70px auto 0 auto;
-    padding: 25px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
+.tour-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #a29e9e;
+  border-radius: 12px;
+}
+
+
+.tour-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #272424;
+}
+
+.tour-label {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.tour-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  border-radius: 2px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tour-password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #006699;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tour-button {
+  background-color: #007399;
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 2px;
+}
+
+.tour-button:disabled {
+  background-color: #006080;
+}
+
+.tour-error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.tour-links {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.tour-links a {
+  color: #006699;
+  text-decoration: none;
+  margin: 0 4px;
+}

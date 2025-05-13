@@ -1,0 +1,29 @@
+.my-bookings-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .booking-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .booking-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-card h3 {
+    color: #f5c300;
+  }
+  
+  .loading, .error {
+    padding: 20px;
+    text-align: center;
+  }
+  

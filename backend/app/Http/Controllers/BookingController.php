@@ -136,6 +136,34 @@ class BookingController extends Controller
         return response()->json($booking);
     }
 
+    //Active Tours
+    public function activeTourBookings()
+{
+    // Fetch bookings with related data
+    $bookings = Booking::with([
+        'contact.country',
+        'package.status',
+        'package.details',
+        'status',
+        'paymentStatus'
+    ])
+    ->whereHas('package.status', function ($query) {
+        $query->where('status_name', 'active');
+    })
+    ->get();
+
+    // Group bookings by tour_category and package_type
+    $groupedBookings = $bookings->groupBy(function ($booking) {
+        return $booking->package->tour_category . '-' . $booking->package->package_type;
+    });
+
+    // Return the grouped bookings as a JSON response
+    return response()->json($groupedBookings);
+}
+
+
+
+
     // Delete a booking
     public function destroy($id)
     {

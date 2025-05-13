@@ -6,6 +6,7 @@ import logo from "../assets/yatra-nepal-logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loginMenuOpen, setLoginMenuOpen] = useState(false); // State to handle dropdown visibility
 
   return (
     <nav className="navbar">
@@ -24,7 +25,18 @@ const Navbar = () => {
           <li><Link to="/packages" onClick={() => setIsOpen(false)}>Packages</Link></li>
           <li><Link to="/about" onClick={() => setIsOpen(false)}>About Us</Link></li>
           <li><Link to="/enquiry" onClick={() => setIsOpen(false)}>Enquiry Now</Link></li>
-          <li><Link to="/login" onClick={() => setIsOpen(false)}>Login</Link></li>
+
+          {/* Login Dropdown */}
+          <li className="login-menu" onClick={() => setLoginMenuOpen(!loginMenuOpen)}>
+            Login
+            {loginMenuOpen && (
+              <ul className="dropdown-menu">
+                <li><Link to="/user/login" onClick={() => setIsOpen(false)}>User Login</Link></li>
+                <li><Link to="/admin/login" onClick={() => setIsOpen(false)}>Admin Login</Link></li>
+              </ul>
+            )}
+          </li>
+
           <li><Link to="/register" onClick={() => setIsOpen(false)}>Register</Link></li>
         </ul>
 

@@ -8,7 +8,7 @@ const Packages = () => {
     package_description: "",
     package_type: "",
     package_price: "",
-    discount: "", // New field
+    discount: "",
     duration: "",
     status_id: "",
     pkg_image: null,

@@ -81,6 +81,69 @@ body {
 .hamburger:hover {
     color: #d18b00;
 }
+
+/* Dropdown Menu for Login */
+.login-menu {
+    position: relative;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #f5c300;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+/* Hover effect for Login */
+.login-menu:hover {
+    color: #d18b00;
+}
+
+/* Dropdown Container */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #002f6c;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: none;
+    width: 200px;
+    z-index: 999;
+    padding: 10px 0;
+    list-style: none; /* Remove list dots */
+}
+
+/* Show dropdown when the menu is open */
+.login-menu:hover .dropdown-menu,
+.login-menu.open .dropdown-menu {
+    display: block;
+}
+
+/* Menu items inside the dropdown */
+.dropdown-menu li {
+    padding: 8px 15px;
+}
+
+/* Links inside the dropdown */
+.dropdown-menu li a {
+    color: #f5c300;
+    font-size: 14px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for dropdown links */
+.dropdown-menu li a:hover {
+    background-color: #d18b00;
+    color: #fff;
+}
+
+/* Styling for dropdown when open (added "open" class) */
+.login-menu.open .dropdown-menu {
+    display: block;
+}
+
+
   
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -103,4 +166,17 @@ body {
     .hamburger {
         display: block;
     }
+    
+        /* Adjust dropdown width for smaller screens */
+        .dropdown-menu {
+            width: 100%;
+        }
+    
+        .dropdown-menu li {
+            padding: 10px 15px;
+        }
+    
+        .dropdown-menu li a {
+            font-size: 16px;
+        }
 }
