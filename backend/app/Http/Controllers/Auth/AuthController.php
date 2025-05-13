@@ -88,7 +88,7 @@ class AuthController extends Controller
         ]);
     }
 
-    // Admin Dashboard data (can also be used as protected route)
+    // Admin Dashboard data
     public function dashboard(Request $request)
     {
         $user = $request->user()->load(['role']);
@@ -100,7 +100,6 @@ class AuthController extends Controller
             ], 403);
         }
 
-        // Example stats, adjust as needed
         $totalUsers = \App\Models\User::count();
         $totalBookings = \App\Models\Booking::count();
         $newBookings = \App\Models\Booking::where('created_at', '>=', now()->subDays(30))->count();

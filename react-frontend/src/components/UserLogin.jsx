@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './Login.css';
 
 const UserLogin = () => {
@@ -9,7 +9,13 @@ const UserLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+
+
+  const emailRef = useRef(null);
+
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -62,6 +68,7 @@ const UserLogin = () => {
         <div>
           <label className="tour-label">Email:</label>
           <input
+            ref={emailRef}
             type="email"
             className="tour-input"
             placeholder="Enter email"
