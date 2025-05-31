@@ -64,8 +64,8 @@ This repository contains a project with **Laravel as the backend** and **React a
 
 ### ✅ Requirements
 
-* Node.js >= 14.x
-* NPM or Yarn
+* Node.js
+* NPM
 
 ### 🚀 Installation
 
