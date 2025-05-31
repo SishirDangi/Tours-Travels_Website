@@ -18,4 +18,10 @@ class ContactController extends Controller
             return response()->json(['message' => 'Contact details not found.'], 404);
         }
     }
+
+    public function count()
+    {
+        $count = Contact::count();
+        return response()->json(['count' => $count]);
+    }
 }

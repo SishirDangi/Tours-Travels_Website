@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+
 use App\Models\User;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -63,4 +65,11 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully.']);
     }
+
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => User::count()]);
+    }
+
+
 }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
+use Illuminate\Http\JsonResponse;
+
 class BookingController extends Controller
 {
     // Show all bookings
@@ -162,8 +164,6 @@ class BookingController extends Controller
 }
 
 
-
-
     // Delete a booking
     public function destroy($id)
     {
@@ -172,4 +172,11 @@ class BookingController extends Controller
 
         return response()->json(['message' => 'Booking deleted successfully']);
     }
+    
+
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => Booking::count()]);
+    }
+
 }

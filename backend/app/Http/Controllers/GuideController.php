@@ -67,4 +67,10 @@ class GuideController extends Controller
 
         return response()->json(['message' => 'Guide deleted successfully']);
     }
+
+    public function count()
+    {
+        $count = Guide::count();
+        return response()->json(['count' => $count]);
+    }
 }

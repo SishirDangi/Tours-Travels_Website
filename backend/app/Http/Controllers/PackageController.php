@@ -160,4 +160,11 @@ class PackageController extends Controller
             ], 500);
         }
     }
+
+    public function count()
+    {
+        $count = Package::count();
+        return response()->json(['count' => $count]);
+    }
+
 }

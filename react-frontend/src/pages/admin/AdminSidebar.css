@@ -1,13 +1,16 @@
 /* Sidebar Styles */
 .admin-sidebar {
   width: 250px;
-  height:100vh;
+  height: 100vh;               
   background-color: #1e293b;
   color: white;
   padding: 20px;
+  box-sizing: border-box;     
   display: flex;
   flex-direction: column;
+  overflow-y: auto;           
 }
+
 
 .admin-sidebar-logo {
   font-size: 20px;

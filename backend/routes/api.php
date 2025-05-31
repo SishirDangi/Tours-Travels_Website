@@ -21,7 +21,13 @@ Route::get('/contact', [ContactController::class, 'getContact']);
 
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 Route::post('/register', [RegisterController::class, 'register']);
+
+Route::get('bookings/count', [BookingController::class, 'count']);
+
 Route::apiResource('bookings', BookingController::class);
+
+Route::get('packages/count', [PackageController::class, 'count']);
+
 Route::apiResource('packages', PackageController::class);
 Route::get('/packages/{id}/details', [PackageController::class, 'getDetails']);
 
@@ -49,6 +55,7 @@ Route::get('/package-details/{packageId}', [PackageDetailController::class, 'sho
 Route::delete('/package-details/{packageId}', [PackageDetailController::class, 'destroy']);
 
 
+Route::get('guides/count', [GuideController::class, 'count']);
 Route::apiResource('guides', GuideController::class);
 
 Route::get('/countries', [CountryController::class, 'index']);
@@ -76,3 +83,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin-dashboard', [AuthController::class, 'index'])->middleware('role:admin');
 
 });
+
+
+Route::get('users/count', [UserController::class, 'count']);
+
+Route::get('contacts/count', [ContactController::class, 'count']);
+Route::get('enquiries/count', [EnquiryController::class, 'count']);
+
+
