@@ -50,4 +50,10 @@ class EnquiryController extends Controller
 
         return response()->json(['message' => 'Enquiry marked as resolved.']);
     }
+
+    public function count()
+    {
+        $count = Enquiry::count();
+        return response()->json(['count' => $count]);
+    }
 }

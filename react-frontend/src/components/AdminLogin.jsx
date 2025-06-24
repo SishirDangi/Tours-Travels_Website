@@ -107,10 +107,10 @@ const AdminLogin = () => {
         </button>
 
         <div className="tour-links">
-          <p>
+          {/* <p>
             Forgot <Link to="/forgot-username">Username</Link> /{" "}
             <Link to="/forgot-password">Password</Link>?
-          </p>
+          </p> */}
         </div>
       </form>
     </div>

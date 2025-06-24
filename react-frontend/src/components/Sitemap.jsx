@@ -4,7 +4,7 @@ import './Sitemap.css';
 const Sitemap = () => {
   return (
     <div className="sitemap-container">
-      <h2 className="sitemap-heading">Our Office Location</h2>
+      <h1 className="sitemap-heading">Our Office Location</h1>
       <div className="map-frame">
         <iframe
           title="Office Location"

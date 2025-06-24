@@ -16,13 +16,11 @@ class PackageController extends Controller
         $packages = Package::all();
 
         $packages->map(function ($package) {
-            // Handle image URL
             if ($package->pkg_image_path) {
                 $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
             }
-            // Handle tour category field
             if ($package->tour_category) {
-                $package->tour_category_name = $package->tour_category;  // For clarity, if needed
+                $package->tour_category_name = $package->tour_category;
             }
             return $package;
         });
@@ -30,20 +28,10 @@ class PackageController extends Controller
         return response()->json($packages, Response::HTTP_OK);
     }
 
-    // Create a new package
+    // Store a new package
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'package_name' => 'required|string|max:255',
-            'package_description' => 'nullable|string',
-            'package_type' => 'required|string|max:100',
-            'package_price' => 'required|numeric',
-            'duration' => 'nullable|string|max:50',
-            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status_id' => 'required|exists:statuses,id',
-            'tour_category' => 'nullable|string|max:255',  // Validate tour category
-            'discount' => 'nullable|numeric|min:0|max:100',  // Validate discount
-        ]);
+        $validated = $this->validatePackage($request);
 
         $imagePath = null;
         if ($request->hasFile('pkg_image')) {
@@ -59,8 +47,8 @@ class PackageController extends Controller
             'duration' => $validated['duration'] ?? null,
             'pkg_image_path' => $imagePath,
             'status_id' => $validated['status_id'],
-            'tour_category' => $validated['tour_category'] ?? null,  // Store tour category
-            'discount' => $validated['discount'] ?? null,  // Store discount
+            'tour_category' => $validated['tour_category'] ?? null,
+            'discount' => $validated['discount'] ?? null,
         ]);
 
         return response()->json($package, Response::HTTP_CREATED);
@@ -74,12 +62,10 @@ class PackageController extends Controller
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // Handle image URL
         if ($package->pkg_image_path) {
             $package->pkg_image_url = asset('storage/' . $package->pkg_image_path);
         }
 
-        // Handle tour category
         if ($package->tour_category) {
             $package->tour_category_name = $package->tour_category;
         }
@@ -95,26 +81,14 @@ class PackageController extends Controller
             return response()->json(['message' => 'Package not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $validated = $request->validate([
-            'package_name' => 'required|string|max:255',
-            'package_description' => 'nullable|string',
-            'package_type' => 'required|string|max:100',
-            'package_price' => 'required|numeric',
-            'duration' => 'nullable|string|max:50',
-            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status_id' => 'required|exists:statuses,id',
-            'tour_category' => 'nullable|string|max:255',  // Validate tour category
-            'discount' => 'nullable|numeric|min:0|max:100',  // Validate discount
-        ]);
+        $validated = $this->validatePackage($request);
 
-        // Handle image upload if provided
         if ($request->hasFile('pkg_image')) {
             $image = $request->file('pkg_image');
             $imagePath = $image->store('images/packages', 'public');
             $validated['pkg_image_path'] = $imagePath;
         }
 
-        // Update package
         $package->update($validated);
 
         return response()->json($package, Response::HTTP_OK);
@@ -137,7 +111,7 @@ class PackageController extends Controller
         return response()->json(['message' => 'Package deleted successfully'], Response::HTTP_OK);
     }
 
-    // Get the package detail for a specific package
+    // Get package detail
     public function getDetails($id)
     {
         try {
@@ -147,7 +121,6 @@ class PackageController extends Controller
                 return response()->json(['message' => 'Package details not found.'], 404);
             }
 
-            // Add image URL to package if exists
             if ($detail->package && $detail->package->pkg_image_path) {
                 $detail->package->pkg_image_url = asset('storage/' . $detail->package->pkg_image_path);
             }
@@ -160,4 +133,70 @@ class PackageController extends Controller
             ], 500);
         }
     }
+
+    // Count total packages
+    public function count()
+    {
+        $count = Package::count();
+        return response()->json(['count' => $count]);
+    }
+
+    // 🔒 Shared Validation Method with Custom Messages
+    private function validatePackage(Request $request)
+    {
+        return $request->validate([
+            'package_name' => 'required|string|max:255',
+            'package_description' => 'nullable|string',
+            'package_type' => 'required|string|max:100',
+            'package_price' => 'required|numeric|min:0',
+            'duration' => 'nullable|string|max:50',
+            'pkg_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_id' => 'required|exists:statuses,id',
+            'tour_category' => 'nullable|string|max:255',
+            'discount' => 'nullable|numeric|min:0|max:100',
+        ], [
+            'package_name.required' => 'Package name is required.',
+            'package_name.string' => 'Package name must be a string.',
+            'package_name.max' => 'Package name cannot exceed 255 characters.',
+
+            'package_description.string' => 'Package description must be a valid string.',
+
+            'package_type.required' => 'Package type is required.',
+            'package_type.string' => 'Package type must be a string.',
+            'package_type.max' => 'Package type cannot exceed 100 characters.',
+
+            'package_price.required' => 'Package price is required.',
+            'package_price.numeric' => 'Package price must be a number.',
+            'package_price.min' => 'Package price cannot be negative.',
+
+            'duration.string' => 'Duration must be a string.',
+            'duration.max' => 'Duration cannot exceed 50 characters.',
+
+            'pkg_image.image' => 'The uploaded file must be an image.',
+            'pkg_image.mimes' => 'Image must be in JPEG, PNG, or JPG format.',
+            'pkg_image.max' => 'Image size must not exceed 2MB.',
+
+            'status_id.required' => 'Status is required.',
+            'status_id.exists' => 'The selected status is invalid.',
+
+            'tour_category.string' => 'Tour category must be a string.',
+            'tour_category.max' => 'Tour category cannot exceed 255 characters.',
+
+            'discount.numeric' => 'Discount must be a number.',
+            'discount.min' => 'Discount must be at least 0%.',
+            'discount.max' => 'Discount cannot exceed 100%.',
+        ]);
+    }
+
+    public function getRandomPackages()
+    {
+        $packages = \App\Models\Package::inRandomOrder()
+            ->select('id', 'package_name')
+            ->take(6)
+            ->get();
+
+        return response()->json($packages);
+    }
+
+
 }

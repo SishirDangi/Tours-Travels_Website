@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import Home from "../components/Home";
@@ -13,20 +13,21 @@ import BookingPolicy from "../components/BookingPolicy";
 import Sitemap from "../components/Sitemap";
 import TermsAndConditions from "../components/TermsAndConditions";
 import PrivacyPolicy from "../components/PrivacyPolicy";
-import UserDashboard from "../pages/user/UserDashboard";
-import ProtectedRoute from "../auth/ProtectedRoute";
-import Navbar from "../components/Navbar";
 import Destinations from "../components/Destinations";
-import MyBookings from "../pages/user/MyBookings";
+import Navbar from "../components/Navbar";
+import Faqss from "../components/Faqss";
 
 const UserRoutes = () => {
   const location = useLocation();
+  const [role, setRole] = useState(sessionStorage.getItem("role"));
 
-  // Get role from sessionStorage (or localStorage if needed)
-  const role = sessionStorage.getItem("role");
+  useEffect(() => {
+    const storedRole = sessionStorage.getItem("role");
+    setRole(storedRole);
+  }, [location]);
 
-  // Hide Navbar only if admin is logged in and NOT on the admin login page
-  const shouldHideNavbar = role === "admin" && location.pathname !== "/admin/login";
+  // Hide Navbar only if role is 'user' and user is inside their dashboard
+  const shouldHideNavbar = role === "user" && location.pathname.startsWith("/registereduser");
 
   return (
     <>
@@ -35,6 +36,7 @@ const UserRoutes = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<TourPackages />} />
+         <Route path="/packages/:id" element={<TourPackages />} />
         <Route path="/enquiry" element={<EnquiryNow />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/booking/:package_id" element={<Booking />} />
@@ -46,17 +48,7 @@ const UserRoutes = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/destinations" element={<Destinations />} />
-
-        <Route
-          path="/user-dashboard/*"
-          element={
-            <ProtectedRoute role="user">
-              <UserDashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/faqs" element={<Faqss />} />
       </Routes>
     </>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";  // import useNavigate
 import './Login.css';
 
 const UserLogin = () => {
@@ -10,8 +10,8 @@ const UserLogin = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
   const emailRef = useRef(null);
+  const navigate = useNavigate();  // initialize navigate
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -41,7 +41,10 @@ const UserLogin = () => {
 
       if (response.data.status === "success") {
         sessionStorage.setItem("token", response.data.access_token);
-        window.open("/user-dashboard", "_blank");
+
+        // Instead of window.open, do this:
+        navigate("/registereduserdashboard", { replace: true });  // <-- important
+
       } else {
         setError("Invalid credentials");
       }
@@ -107,10 +110,10 @@ const UserLogin = () => {
         </button>
 
         <div className="tour-links">
-          <p>
+          {/* <p>
             Forgot <Link to="/forgot-username">Username</Link> /{" "}
             <Link to="/forgot-password">Password</Link>?
-          </p>
+          </p> */}
           <p>
             Don't have an account? <Link to="/register">Sign up</Link>
           </p>

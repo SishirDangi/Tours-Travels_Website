@@ -1,7 +1,5 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserController;
@@ -16,63 +14,76 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PaymentStatusController;
 use App\Models\Status;
-
-Route::get('/contact', [ContactController::class, 'getContact']);
-
-Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
+use App\Http\Controllers\HomePageDetailController;
+// Authentication
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
+
+// User data
+Route::get('users/count', [UserController::class, 'count']);
+Route::get('/user', [AuthController::class, 'getUser']);
+Route::resource('users', UserController::class)->only(['index', 'update', 'destroy']);
+
+// Password change route
+Route::middleware('auth:sanctum')->post('/user/change-password', [UserController::class, 'changePassword']);
+
+// Booking
+Route::get('bookings/count', [BookingController::class, 'count']);
 Route::apiResource('bookings', BookingController::class);
+Route::get('/active-tours', [BookingController::class, 'activeTourBookings']);
+
+// Contact
+Route::get('contacts/count', [ContactController::class, 'count']);
+Route::get('/contact', [ContactController::class, 'getContact']);
+Route::put('/contacts/{id}', [ContactController::class, 'update']);
+
+Route::get('/packages/random', [PackageController::class, 'getRandomPackages']);
+// Packages
+Route::get('packages/count', [PackageController::class, 'count']);
 Route::apiResource('packages', PackageController::class);
 Route::get('/packages/{id}/details', [PackageController::class, 'getDetails']);
 
-Route::get('/statuses', function () {
-    return Status::all();
-});
 
-Route::post('/login', [AuthController::class, 'login']);
-
-
-Route::controller(EnquiryController::class)->group(function () {
-    Route::get('/enquiries', 'index');
-    Route::post('/enquiries', 'store');
-    Route::put('/enquiries/{id}/resolve', 'resolve');
-});
-
-
-Route::resource('users', UserController::class)->only([
-    'index', 'update', 'destroy'
-]);
-
-
+// Package Details
 Route::post('/package-details/{packageId}', [PackageDetailController::class, 'store']);
 Route::get('/package-details/{packageId}', [PackageDetailController::class, 'show']);
 Route::delete('/package-details/{packageId}', [PackageDetailController::class, 'destroy']);
 
 
+// Guides
+Route::get('guides/count', [GuideController::class, 'count']);
 Route::apiResource('guides', GuideController::class);
 
+// Countries
 Route::get('/countries', [CountryController::class, 'index']);
 
-Route::get('contacts', [ContactController::class, 'index']);
-
-//Active Tours
-Route::get('/active-tours', [BookingController::class, 'activeTourBookings']);
-
-
+// Payment Status
 Route::get('payment-statuses', [PaymentStatusController::class, 'index']);
 
+// Statuses (all)
+Route::get('/statuses', function () {
+    return Status::all();
+});
 
+// Enquiries
+Route::controller(EnquiryController::class)->group(function () {
+    Route::get('/enquiries/count', 'count');
+    Route::get('/enquiries', 'index');
+    Route::post('/enquiries', 'store');
+    Route::put('/enquiries/{id}/resolve', 'resolve');
+    
+});
 
-
+// Dashboards (with auth)
 Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/user', [AuthController::class, 'getUser']);
-
-    // Logout
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    // User & Admin dashboards
     Route::get('/user-dashboard', [UserController::class, 'index'])->middleware('role:user');
     Route::get('/admin-dashboard', [AuthController::class, 'index'])->middleware('role:admin');
-
 });
+
+Route::apiResource('home-page-details', HomePageDetailController::class);
+
+Route::middleware('auth:sanctum')->post('/admin/change-password', [UserController::class, 'changeAdminPassword']);
+
+

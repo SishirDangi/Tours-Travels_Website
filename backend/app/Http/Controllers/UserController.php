@@ -2,55 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Contact;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    // Get all users with contact and role info
+    /**
+     * Get all users with contact and role info.
+     */
     public function index()
     {
         $users = User::with(['contact', 'role'])->get();
         return response()->json($users);
     }
+public function changePassword(Request $request): JsonResponse
+{
+    $user = auth()->user();
 
-    // Update a user (contact info or password)
-    public function update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
+    $request->validate([
+        'old_password' => 'required',
+        'password' => 'required|min:6|confirmed',
+    ]);
 
-        // Validate request
-        $request->validate([
-            'first_name' => 'sometimes|string|max:255',
-            'last_name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:contacts,email,' . $user->contact_id,
-            'mobile_no' => 'sometimes|numeric|unique:contacts,mobile_no,' . $user->contact_id,
-            'password' => 'nullable|min:6|confirmed'
-        ]);
-
-        // Update contact info
-        if ($user->contact) {
-            $user->contact->update([
-                'first_name' => $request->first_name ?? $user->contact->first_name,
-                'last_name' => $request->last_name ?? $user->contact->last_name,
-                'email' => $request->email ?? $user->contact->email,
-                'mobile_no' => $request->mobile_no ?? $user->contact->mobile_no,
-            ]);
-        }
-
-        // Update password if provided
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-        }
-
-        return response()->json(['message' => 'User updated successfully.']);
+    // Check old password
+    if (!\Illuminate\Support\Facades\Hash::check($request->old_password, $user->password)) {
+        return response()->json(['error' => 'The old password you entered is incorrect.'], 400);
     }
 
-    // Delete a user and associated contact
-    public function destroy($id)
+    // Check new password is not the same as the old one
+    if (\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+        return response()->json(['error' => 'The new password must be different from your current password.'], 400);
+    }
+
+    $user->update([
+        'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+    ]);
+
+    return response()->json(['message' => 'Your password has been updated successfully.']);
+}
+
+    /**
+     * Delete a user and associated contact.
+     */
+    public function destroy($id): JsonResponse
     {
         $user = User::findOrFail($id);
 
@@ -63,4 +59,75 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully.']);
     }
+
+    /**
+     * Get total user count.
+     */
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => User::count()]);
+    }
+
+        public function changeAdminPassword(Request $request): JsonResponse
+    {
+        $user = auth()->user();
+
+        // Optional: Check if user is admin by role_id or role
+        if (!$user || $user->role_id !== 1) {  // Assuming role_id=1 is admin
+            return response()->json(['error' => 'Unauthorized.'], 401);
+        }
+
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        // Check old password
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json(['error' => 'The old password you entered is incorrect.'], 400);
+        }
+
+        // Check new password is not same as old
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'The new password must be different from your current password.'], 400);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json(['message' => 'Your password has been updated successfully.']);
+    }
+
+    public function update(Request $request, $id)
+{
+    // Validate incoming data
+    $validated = $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name'  => 'required|string|max:255',
+        'email'      => 'required|email|max:255',
+        'mobile_no'  => 'required|numeric|min:10',
+    ]);
+
+    // Find user and related contact
+    $user = User::findOrFail($id);
+    $contact = $user->contact;
+
+    if (!$contact) {
+        return response()->json(['error' => 'User contact not found.'], 404);
+    }
+
+    // Update contact details
+    $contact->first_name = $validated['first_name'];
+    $contact->last_name  = $validated['last_name'];
+    $contact->email      = $validated['email'];
+    $contact->mobile_no  = $validated['mobile_no'];
+
+    $contact->save();
+
+    return response()->json(['message' => 'User updated successfully.', 'user' => $user->load('contact')]);
 }
+
+
+}
+

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
@@ -18,6 +18,8 @@ const Register = () => {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,6 +73,9 @@ const Register = () => {
       });
       setOtp('');
       setIsOtpSent(false);
+
+      // Redirect user to login page after successful OTP verification
+      navigate('/user/login');
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message || 'OTP verification failed.');

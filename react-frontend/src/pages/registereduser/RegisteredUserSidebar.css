@@ -1,0 +1,126 @@
+/* Sidebar Styles */
+.registereduser-sidebar {
+  position: fixed;                /* Fixed to the viewport */
+  top: 0;
+  left: 0;
+  width: 250px;                   /* Fixed width */
+  height: 100vh;                  /* Full height of the viewport */
+  background-color: #1e293b;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 999;                   /* Ensure it stays above other content */
+}
+
+.registereduser-sidebar-logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #38bdf8;
+}
+
+.registereduser-sidebar-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex-grow: 1;
+}
+
+.registereduser-sidebar-nav-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.registereduser-sidebar-nav-links a:hover,
+.registereduser-sidebar-nav-links a.active {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.registereduser-sidebar-logout-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  align-self: flex-start;
+}
+
+.registereduser-sidebar-logout-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Modal Styles */
+.registereduser-logout-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.registereduser-logout-modal-content {
+  background-color: #2d3748;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  width: 300px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.registereduser-logout-modal-content p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.registereduser-logout-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.registereduser-logout-modal-buttons button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  background-color: #38bdf8;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.registereduser-logout-modal-buttons button:hover {
+  background-color: #0ea5e9;
+}
+
+.registereduser-logout-modal-buttons button:nth-child(2) {
+  background-color: #ef4444;
+}
+
+.registereduser-logout-modal-buttons button:nth-child(2):hover {
+  background-color: #dc2626;
+}

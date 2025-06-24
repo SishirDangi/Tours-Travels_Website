@@ -8,14 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
+use Illuminate\Http\JsonResponse;
+
 class BookingController extends Controller
 {
     // Show all bookings
-    public function index()
-    {
-        $bookings = Booking::with(['contact.country', 'package', 'status', 'paymentStatus'])->get();
-        return response()->json($bookings);
+   public function index(Request $request)
+{
+    $query = Booking::with(['contact.country', 'package', 'status', 'paymentStatus']);
+
+    if ($request->has('email')) {
+        $query->whereHas('contact', function ($q) use ($request) {
+            $q->where('email', $request->email);
+        });
     }
+
+    $bookings = $query->get();
+    return response()->json($bookings);
+}
+
 
     // Store a new booking
     public function store(Request $request)
@@ -26,7 +37,7 @@ class BookingController extends Controller
                 'first_name' => 'required|string|max:100',
                 'last_name' => 'required|string|max:100',
                 'gender' => 'required|string|max:10',
-                'mobile_no' => 'required|string|max:20|unique:contacts,mobile_no',
+                'mobile_no' => 'required|numeric|min:10|unique:contacts,mobile_no',
                 'email' => 'required|string|email|max:100|unique:contacts,email',
                 'address' => 'nullable|string',
                 'country_id' => 'required|exists:countries,id',
@@ -106,35 +117,43 @@ class BookingController extends Controller
         return response()->json($booking);
     }
 
-    // Update an existing booking
-    public function update(Request $request, $id)
-    {
-        // Validate the request data
-        $request->validate([
-            'booking_date' => 'required|date',
-            'tour_date' => 'required|date|after_or_equal:booking_date',
-            'total_price' => 'required|numeric',
-            'contact_id' => 'required|exists:contacts,id',
-            'package_id' => 'required|exists:packages,id',
-            'status_id' => 'nullable|exists:statuses,id',
-            'payment_status_id' => 'nullable|exists:payment_statuses,id',
-            'no_of_persons' => 'required|numeric',
-        ]);
 
-        $booking = Booking::findOrFail($id);
-        $booking->update([
-            'booking_date' => $request->booking_date,
-            'tour_date' => $request->tour_date,
-            'total_price' => $request->total_price,
-            'contact_id' => $request->contact_id,
-            'package_id' => $request->package_id,
-            'status_id' => $request->status_id,
-            'payment_status_id' => $request->payment_status_id,
-            'no_of_persons' => $request->no_of_persons,
-        ]);
+  // Update an existing booking
+public function update(Request $request, $id)
+{
+    $booking = Booking::findOrFail($id);
 
-        return response()->json($booking);
+    if (Carbon::parse($booking->created_at)->diffInHours(now()) > 24) {
+        return response()->json(['error' => 'Booking cannot be edited after 24 hours.'], 403);
     }
+
+    $request->validate([
+        'booking_date' => 'required|date',
+        'tour_date' => 'required|date|after_or_equal:booking_date',
+        'total_price' => 'required|numeric',
+        'contact_id' => 'required|exists:contacts,id',
+        'package_id' => 'required|exists:packages,id',
+        'status_id' => 'nullable|exists:statuses,id',
+        'payment_status_id' => 'nullable|exists:payment_statuses,id',
+        'no_of_persons' => 'required|integer|min:1',  // ✅ Enforces at least 1 person
+    ]);
+
+    $booking->update([
+        'booking_date' => $request->booking_date,
+        'tour_date' => $request->tour_date,
+        'total_price' => $request->total_price,
+        'contact_id' => $request->contact_id,
+        'package_id' => $request->package_id,
+        'status_id' => $request->status_id,
+        'payment_status_id' => $request->payment_status_id,
+        'no_of_persons' => $request->no_of_persons,
+    ]);
+
+    return response()->json([
+        'message' => 'Booking updated successfully.',
+        'booking' => $booking
+    ]);
+}
 
     //Active Tours
     public function activeTourBookings()
@@ -162,8 +181,6 @@ class BookingController extends Controller
 }
 
 
-
-
     // Delete a booking
     public function destroy($id)
     {
@@ -172,4 +189,11 @@ class BookingController extends Controller
 
         return response()->json(['message' => 'Booking deleted successfully']);
     }
+    
+
+    public function count(): JsonResponse
+    {
+        return response()->json(['count' => Booking::count()]);
+    }
+
 }

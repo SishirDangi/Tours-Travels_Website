@@ -7,7 +7,6 @@
   border-radius: 12px;
 }
 
-
 .tour-form {
   display: flex;
   flex-direction: column;
@@ -45,29 +44,37 @@
   right: 10px;
   transform: translateY(-50%);
   font-size: 14px;
-  color: #006699;
+  color: #b8860b; /* dark goldenrod */
   cursor: pointer;
   user-select: none;
 }
 
+/* Dark golden buttons */
 .tour-button {
-  background-color: #007399;
-  color: white;
+  background: linear-gradient(90deg, #ead398 0%, #7c6100 100%);
+  color: #fffbea;
   padding: 12px;
   font-weight: bold;
   font-size: 14px;
   border: none;
   cursor: pointer;
   margin-top: 10px;
-  border-radius: 2px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.tour-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #7c6100 0%, #b4a989 100%);
 }
 
 .tour-button:disabled {
-  background-color: #006080;
+  background-color: #dcd1a4;
+  color: #d0c48c;
+  cursor: not-allowed;
 }
 
 .tour-error {
-  color: red;
+  color: #cc0033;
   font-size: 14px;
   margin-bottom: 10px;
 }
@@ -79,7 +86,11 @@
 }
 
 .tour-links a {
-  color: #006699;
+  color: #b8860b; /* dark goldenrod */
   text-decoration: none;
   margin: 0 4px;
+}
+
+.tour-links a:hover {
+  text-decoration: underline;
 }

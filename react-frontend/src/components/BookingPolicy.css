@@ -1,62 +1,69 @@
 .booking-policy-page {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 40px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    font-family: sans-serif;
-  }
-  
-  .booking-policy-header h1 {
-    font-size: 2.6rem;
-    text-align: center;
-    color: #cda508;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-shadow: 0 0 8px rgba(205, 165, 8, 0.6);
-  }
-  
-  
-  .booking-policy-header p {
-    text-align: center;
-    font-size: 1.7rem;
-    color: #292727;
-    margin-bottom: 30px;
-  }
-  
-  .booking-policy-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .booking-policy-list li {
-    display: flex;
-    align-items: flex-start;
-    background: #f9f9f9;
-    padding: 15px 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-  }
-  
-  .booking-policy-list li:hover {
-    background-color: #fff8e1;
-    transform: translateY(-2px);
-  }
-  
-  .bullet-icon {
-    color: #cda508;
-    font-size: 1.4rem;
-    margin-right: 15px;
-    margin-top: 3px;
-    flex-shrink: 0;
-  }
-  
-  .booking-policy-list span {
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.6;
-  }
-  
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 45px 50px;
+  background: #fdf9f0; /* very light cream/white background */
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #3c3c3c;
+}
+
+.booking-policy-header h1 {
+  font-size: 3rem;
+  text-align: center;
+  color: #b8860b; /* dark golden */
+  font-weight: 900;
+  margin-bottom: 12px;
+  letter-spacing: 1.5px;
+  font-family: 'Georgia', serif;
+}
+
+.booking-policy-header p {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #6b5e1e;
+  margin-bottom: 40px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+
+.booking-policy-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.booking-policy-list li {
+  display: flex;
+  align-items: flex-start;
+  background: #ffffff; /* clean white background */
+  padding: 18px 25px;
+  border-radius: 18px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.booking-policy-list li:hover {
+  background-color: #fff8dc; /* very light warm cream on hover */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(184, 134, 11, 0.2); /* subtle golden shadow */
+}
+
+.bullet-icon {
+  color: #b8860b; /* dark golden */
+  font-size: 1.6rem;
+  margin-right: 18px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.booking-policy-list span {
+  font-size: 1.1rem;
+  color: #3c3c3c;
+  line-height: 1.7;
+  font-weight: 500;
+}

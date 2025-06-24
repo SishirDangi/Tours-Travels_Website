@@ -9,6 +9,7 @@ import Enquiries from "../pages/admin/Enquiries";
 import ActiveTours from "../pages/admin/ActiveTours";
 import Guides from "../pages/admin/Guides";
 import Users from "../pages/admin/Users";
+import AddHomePageDetails from "../pages/admin/AddHomePageDetails";
 import Settings from "../pages/admin/Settings";
 
 const AdminRoutes = () => {
@@ -27,6 +28,7 @@ const AdminRoutes = () => {
         <Route path="active-tours" element={<ActiveTours />} />
         <Route path="guides" element={<Guides />} />
         <Route path="users" element={<Users />} />
+        <Route path="add-details" element={<AddHomePageDetails />} />
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

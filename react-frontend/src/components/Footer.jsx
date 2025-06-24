@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Footer.css";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { HiOutlineMail, HiOutlinePhone } from "react-icons/hi";
 import { MdLocationOn } from "react-icons/md";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [tourPackages, setTourPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8001/api/packages/random")
+      .then((res) => {
+        setTourPackages(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch random packages", err);
+        setError("Failed to load packages");
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <footer className="footer">
       <div className="footer-container">
-        
         {/* About Yatra Nepal */}
         <div className="footer-section about">
           <h2>About Yatra Nepal</h2>
@@ -23,9 +40,9 @@ const Footer = () => {
           </p>
           <h3>Stay Connected</h3>
           <div className="social-icons">
-            <Link to="#" target="_blank" rel="noopener noreferrer"><FaFacebookF /></Link>
-            <Link to="#" target="_blank" rel="noopener noreferrer"><FaTwitter /></Link>
-            <Link to="#" target="_blank" rel="noopener noreferrer"><FaInstagram /></Link>
+            <Link to="#"><FaFacebookF /></Link>
+            <Link to="#"><FaTwitter /></Link>
+            <Link to="#"><FaInstagram /></Link>
           </div>
         </div>
 
@@ -34,24 +51,27 @@ const Footer = () => {
           <h2>Quick Links</h2>
           <ul>
             <li><Link to="/about">About Us</Link></li>
-            <li><Link to="#">Blogs</Link></li>
             <li><Link to="/bookingpolicy">Booking Policy</Link></li>
             <li><Link to="/sitemap">Sitemap</Link></li>
-            <li><Link to="register">Register</Link></li>
-            <li><Link to="login">Login</Link></li>
+            <li><Link to="/register">Register</Link></li>
+            <li><Link to="/user/login">Login</Link></li>
           </ul>
         </div>
 
-        {/* Tour Packages */}
+        {/* Tour Packages (Dynamic) */}
         <div className="footer-section tour-packages">
           <h2>Tour Packages</h2>
           <ul>
-            <li><Link to="#">Kathmandu Tour Package</Link></li>
-            <li><Link to="#">Bhaktapur Tour Package</Link></li>
-            <li><Link to="#">Lalitpur Tour Package</Link></li>
-            <li><Link to="#">Nagarkot Tour Package</Link></li>
-            <li><Link to="#">Pokhara Tour Package</Link></li>
-            <li><Link to="#">Mustang Tour Package</Link></li>
+            {loading && <li>Loading packages...</li>}
+            {error && <li>{error}</li>}
+            {!loading && !error && tourPackages.length === 0 && (
+              <li>No packages found.</li>
+            )}
+            {!loading && !error && tourPackages.map((pkg) => (
+              <li key={pkg.id}>
+                <Link to={`/packages/${pkg.id}`}>{pkg.package_name}</Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -72,7 +92,7 @@ const Footer = () => {
           <div className="footer-links">
             <Link to="/terms">Terms & Condition</Link>
             <Link to="/privacy">Privacy Policy</Link>
-            <Link to="faqs">FAQs</Link>
+            <Link to="/faqs">FAQs</Link>
           </div>
         </div>
       </div>

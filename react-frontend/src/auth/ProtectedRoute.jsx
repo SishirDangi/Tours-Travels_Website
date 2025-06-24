@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import UserDashboard from "../pages/user/UserDashboard"; // Make sure this path is correct
+import RegisteredUserDashboard from "../pages/registereduser/RegisteredUserDashboard";
 
 const ProtectedRoute = ({ children, role }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -36,7 +36,7 @@ const ProtectedRoute = ({ children, role }) => {
   }, [role]);
 
   if (loading) {
-    return role === "admin" ? <AdminDashboard /> : <UserDashboard />;
+    return role === "admin" ? <AdminDashboard /> : <RegisteredUserDashboard />;
   }
 
   if (!isAuthenticated) {

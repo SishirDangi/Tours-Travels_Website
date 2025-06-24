@@ -1,30 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Select from "react-select/creatable"; // Creatable select for adding new options
 import "./Packages.css";
 
 const Packages = () => {
   const [formData, setFormData] = useState({
     package_name: "",
     package_description: "",
-    package_type: "",
+    package_type: null, // will hold option object { value, label }
     package_price: "",
     discount: "",
     duration: "",
     status_id: "",
     pkg_image: null,
-    tour_category: "",
+    tour_category: null, // will hold option object { value, label }
   });
 
   const [packages, setPackages] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const packagesPerPage = 10;
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: "", messages: [], isError: false });
+
+  const [packageTypes, setPackageTypes] = useState([]); // Options for package type select
+  const [tourCategories, setTourCategories] = useState([]); // Options for tour category select
+
+  const fileInputRef = useRef(null);
+
+  const packagesPerPage = 7;
 
   useEffect(() => {
     fetchStatuses();
@@ -43,9 +50,18 @@ const Packages = () => {
   const fetchPackages = async () => {
     try {
       const response = await axios.get("http://localhost:8001/api/packages");
-      setPackages(response.data);
+      const pkgs = response.data;
+      setPackages(pkgs);
+
+      // Extract unique package types and tour categories from packages
+      const uniquePackageTypes = Array.from(new Set(pkgs.map(pkg => pkg.package_type).filter(Boolean)));
+      const uniqueTourCategories = Array.from(new Set(pkgs.map(pkg => pkg.tour_category).filter(Boolean)));
+
+      // Map them into react-select option format {value, label}
+      setPackageTypes(uniquePackageTypes.map(name => ({ value: name, label: name })));
+      setTourCategories(uniqueTourCategories.map(name => ({ value: name, label: name })));
     } catch (error) {
-      console.error("Error fetching packages:", error);
+      console.error("Error fetching packages or types/categories:", error);
     }
   };
 
@@ -60,53 +76,52 @@ const Packages = () => {
     }
   };
 
+  // Handler for react-select package type
+  const handlePackageTypeChange = (selectedOption) => {
+    setFormData({ ...formData, package_type: selectedOption });
+  };
+
+  // Handler for react-select tour category
+  const handleTourCategoryChange = (selectedOption) => {
+    setFormData({ ...formData, tour_category: selectedOption });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
+    // Prepare form data for submission
     const form = new FormData();
-    for (let key in formData) {
-      if (formData[key]) {
-        form.append(key, formData[key]);
-      }
+    form.append("package_name", formData.package_name);
+    form.append("package_description", formData.package_description);
+    form.append("package_type", formData.package_type ? formData.package_type.value : "");
+    form.append("package_price", formData.package_price);
+    form.append("discount", formData.discount || "");
+    form.append("duration", formData.duration || "");
+    form.append("status_id", formData.status_id);
+    form.append("tour_category", formData.tour_category ? formData.tour_category.value : "");
+    if (formData.pkg_image instanceof File) {
+      form.append("pkg_image", formData.pkg_image);
     }
 
     try {
       if (selectedPackage) {
-        await axios.post(
-          `http://localhost:8001/api/packages/${selectedPackage.id}?_method=PUT`,
-          form,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-        setMessage("Package updated successfully!");
+        // Update existing package
+        await axios.post(`http://localhost:8001/api/packages/${selectedPackage.id}?_method=PUT`, form, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        setModalContent({ title: "Success", messages: ["Package updated successfully!"], isError: false });
       } else {
+        // Create new package
         await axios.post("http://localhost:8001/api/packages", form, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        setMessage("Package added successfully!");
+        setModalContent({ title: "Success", messages: ["Package added successfully!"], isError: false });
       }
-
-      setSelectedPackage(null);
-      setFormData({
-        package_name: "",
-        package_description: "",
-        package_type: "",
-        package_price: "",
-        discount: "", // Reset discount
-        duration: "",
-        status_id: "",
-        pkg_image: null,
-        tour_category: "",
-      });
-      setPreviewImage(null);
-      document.querySelector('input[name="pkg_image"]').value = "";
-
-      fetchPackages();
+      setShowModal(true);
     } catch (error) {
-      console.error("Submit error:", error);
-      setMessage("Error processing the package.");
-    } finally {
-      setLoading(false);
+      const messages = error.response?.data?.errors ? Object.values(error.response.data.errors).flat() : ["Unknown error occurred."];
+      setModalContent({ title: "Validation Error", messages, isError: true });
+      setShowModal(true);
     }
   };
 
@@ -115,13 +130,13 @@ const Packages = () => {
     setFormData({
       package_name: pkg.package_name,
       package_description: pkg.package_description,
-      package_type: pkg.package_type,
+      package_type: pkg.package_type ? { value: pkg.package_type, label: pkg.package_type } : null,
       package_price: pkg.package_price,
-      discount: pkg.discount || "", // Load discount
+      discount: pkg.discount || "",
       duration: pkg.duration || "",
       status_id: pkg.status_id,
       pkg_image: null,
-      tour_category: pkg.tour_category || "",
+      tour_category: pkg.tour_category ? { value: pkg.tour_category, label: pkg.tour_category } : null,
     });
     setPreviewImage(pkg.pkg_image_url || null);
   };
@@ -130,55 +145,80 @@ const Packages = () => {
     if (window.confirm("Are you sure you want to delete this package?")) {
       try {
         await axios.delete(`http://localhost:8001/api/packages/${id}`);
-        setMessage("Package deleted successfully!");
         fetchPackages();
+        setModalContent({ title: "Deleted", messages: ["Package deleted successfully!"], isError: false });
+        setShowModal(true);
       } catch (error) {
-        console.error("Delete error:", error);
-        setMessage("Error deleting package.");
+        setModalContent({ title: "Error", messages: ["Failed to delete package."], isError: true });
+        setShowModal(true);
       }
     }
   };
 
-  const getStatusName = (id) => {
-    const status = statuses.find((s) => s.id === id);
-    return status
-      ? status.status_name.charAt(0).toUpperCase() + status.status_name.slice(1)
-      : "N/A";
+  const handleCloseModal = () => {
+    setShowModal(false);
+
+    // Reset form & state only after modal closes
+    setFormData({
+      package_name: "",
+      package_description: "",
+      package_type: null,
+      package_price: "",
+      discount: "",
+      duration: "",
+      status_id: "",
+      pkg_image: null,
+      tour_category: null,
+    });
+    setSelectedPackage(null);
+    setPreviewImage(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+
+    fetchPackages();
   };
 
-  const filteredPackages = packages.filter((pkg) =>
+  // Filter and pagination logic
+  const filteredPackages = packages.filter(pkg =>
     pkg.package_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const indexOfLastPackage = currentPage * packagesPerPage;
-  const indexOfFirstPackage = indexOfLastPackage - packagesPerPage;
-  const currentPackages = filteredPackages.slice(
-    indexOfFirstPackage,
-    indexOfLastPackage
-  );
+  const currentPackages = filteredPackages.slice((currentPage - 1) * packagesPerPage, currentPage * packagesPerPage);
   const totalPages = Math.ceil(filteredPackages.length / packagesPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
 
   return (
     <div className="packages-container">
-      <div className="package-heading">{selectedPackage ? "Update Package" : "Add New Package"}</div>
-      {message && <p>{message}</p>}
+      {showModal && (
+        <div className="modal-backdrop">
+          <div className={`modal-box ${modalContent.isError ? "error" : "success"}`}>
+            <h3>{modalContent.title}</h3>
+            <ul>
+              {modalContent.messages.map((msg, i) => (
+                <li key={i}>{msg}</li>
+              ))}
+            </ul>
+            <button onClick={handleCloseModal}>Close</button>
+          </div>
+        </div>
+      )}
+
+      <h1 className="package-heading">{selectedPackage ? "Update Package" : "Add New Package"}</h1>
+
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div>
           <label>Package Name:</label>
           <input
-            type="text"
             name="package_name"
             value={formData.package_name}
             onChange={handleChange}
             required
           />
         </div>
+
         <div>
-          <label>Package Description:</label>
+          <label>Description:</label>
           <textarea
             name="package_description"
             value={formData.package_description}
@@ -186,54 +226,50 @@ const Packages = () => {
             required
           />
         </div>
+
         <div>
           <label>Package Type:</label>
-          <select
-            name="package_type"
+          <Select
+            isClearable
+            onChange={handlePackageTypeChange}
+            options={packageTypes}
             value={formData.package_type}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Type</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Nature">Nature</option>
-            <option value="Culture">Culture</option>
-          </select>
+            placeholder="Select or type to add"
+            formatCreateLabel={inputValue => `Add "${inputValue}"`}
+            noOptionsMessage={() => "Type to add new"}
+          />
         </div>
+
         <div>
-          <label>Package Price:</label>
+          <label>Price:</label>
           <input
-            type="number"
             name="package_price"
+            type="number"
             value={formData.package_price}
-            step="1"
             onChange={handleChange}
             required
           />
         </div>
+
         <div>
-          <label>Discount (%):</label>
+          <label>Discount:</label>
           <input
-            type="number"
             name="discount"
+            type="number"
             value={formData.discount}
-            step="1"
-            min="0"
-            max="100"
             onChange={handleChange}
-            placeholder="e.g., 10"
           />
         </div>
+
         <div>
           <label>Duration:</label>
           <input
-            type="text"
             name="duration"
             value={formData.duration}
             onChange={handleChange}
-            placeholder="e.g., 3D-5N"
           />
         </div>
+
         <div>
           <label>Status:</label>
           <select
@@ -242,88 +278,81 @@ const Packages = () => {
             onChange={handleChange}
             required
           >
-            <option value="">Select Status</option>
-            {statuses
-              .filter(
-                (status) =>
-                  status.status_name.toLowerCase() === "active" ||
-                  status.status_name.toLowerCase() === "inactive"
-              )
-              .map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.status_name.charAt(0).toUpperCase() +
-                    status.status_name.slice(1)}
-                </option>
-              ))}
+            <option value="">Select</option>
+            {statuses.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.status_name}
+              </option>
+            ))}
           </select>
         </div>
+
         <div>
           <label>Tour Category:</label>
-          <input
-            type="text"
-            name="tour_category"
+          <Select
+            isClearable
+            onChange={handleTourCategoryChange}
+            options={tourCategories}
             value={formData.tour_category}
-            onChange={handleChange}
-            placeholder="Enter tour category (optional)"
+            placeholder="Select or type to add"
+            formatCreateLabel={inputValue => `Add "${inputValue}"`}
+            noOptionsMessage={() => "Type to add new"}
           />
         </div>
+
         <div>
-          <label>Package Image:</label>
+          <label>Image:</label>
           <input
-            type="file"
+            ref={fileInputRef}
             name="pkg_image"
+            type="file"
             accept="image/*"
             onChange={handleChange}
-            required
+            required={!selectedPackage}
           />
-          {previewImage && <img src={previewImage} alt="Preview" width="150" />}
+          {previewImage && <img src={previewImage} alt="Preview" width="100" />}
         </div>
-        <button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : selectedPackage ? "Update Package" : "Create Package"}
-        </button>
+
+        <button type="submit">{selectedPackage ? "Update" : "Create"}</button>
       </form>
 
-      <div className="all-packages-design">All Packages</div>
-
+      <h2 className="all-packages-design">All Packages</h2>
       <div className="packages-searchbar">
-        <span className="package-search-label">Search: </span>
         <input
-          type="text"
-          placeholder="Search by package name..."
+          placeholder="Search..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginBottom: "10px", padding: "5px", width: "200px" }}
         />
       </div>
 
       <table>
         <thead>
           <tr>
-            <th>Package Name</th>
+            <th>Name</th>
             <th>Image</th>
-            <th>Type</th>
+            <th>Package Type</th>
             <th>Status</th>
             <th>Price</th>
             <th>Discount</th>
-            <th>Total Price</th>
+            <th>Total</th>
             <th>Duration</th>
             <th>Tour Category</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentPackages.map((pkg) => (
             <tr key={pkg.id}>
               <td>{pkg.package_name}</td>
-              <td><img src={pkg.pkg_image_url} alt={pkg.package_name} width="100" /></td>
-              <td>{pkg.package_type}</td>
-              <td>{getStatusName(pkg.status_id)}</td>
-              <td>{pkg.package_price}</td>
-              <td>{pkg.discount ? `${pkg.discount}%` : "0%"}</td>
               <td>
-                {pkg.discount
-                  ? (pkg.package_price - (pkg.package_price * pkg.discount) / 100).toFixed(2)
-                  : pkg.package_price}
+                <img src={pkg.pkg_image_url} alt={pkg.package_name} width="80" />
+              </td>
+              <td>{pkg.package_type}</td>
+              <td>{pkg.status_id}</td>
+              <td>{pkg.package_price}</td>
+              <td>{pkg.discount || 0}%</td>
+              <td>
+                {(pkg.package_price - (pkg.package_price * (pkg.discount || 0)) / 100).toFixed(2)}
               </td>
               <td>{pkg.duration}</td>
               <td>{pkg.tour_category}</td>
@@ -336,18 +365,12 @@ const Packages = () => {
         </tbody>
       </table>
 
-      <div className="pagination-buttons" style={{ marginTop: "10px" }}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
+      <div className="pagination-buttons">
+        <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
           Prev
         </button>
-        <span style={{ margin: "0 10px" }}>{currentPage}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
+        <span>{currentPage}</span>
+        <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
           Next
         </button>
       </div>

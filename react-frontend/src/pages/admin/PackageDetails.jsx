@@ -27,6 +27,7 @@ const PackageDetails = () => {
       .then((res) => {
         setDetails({
           ...res.data,
+          main_information: res.data?.main_information || "",
           cost_includes: res.data?.cost_includes || [],
           cost_excludes: res.data?.cost_excludes || [],
           itinerary: res.data?.itinerary || [],
@@ -73,18 +74,26 @@ const PackageDetails = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!selectedPackage) return;
+
     setLoading(true);
-    axios.post(`http://localhost:8001/api/package-details/${selectedPackage.id}`, {
-      ...details,
+
+    const payload = {
+      main_information: details.main_information || "",
+      cost_includes: Array.isArray(details.cost_includes) ? details.cost_includes : [],
+      cost_excludes: Array.isArray(details.cost_excludes) ? details.cost_excludes : [],
+      itinerary: Array.isArray(details.itinerary) ? details.itinerary : [],
+      trip_highlights: Array.isArray(details.trip_highlights) ? details.trip_highlights : [],
       package_id: selectedPackage.id,
-    })
+    };
+
+    axios.post(`http://localhost:8001/api/package-details/${selectedPackage.id}`, payload)
       .then(() => {
         alert("Details saved successfully!");
         setEditMode(false);
       })
       .catch((err) => {
-        console.error("Error saving details:", err);
-        alert("Failed to save.");
+        console.error("Error saving details:", err.response?.data || err.message);
+        alert("Failed to save. Please check the input format.");
       })
       .finally(() => setLoading(false));
   };

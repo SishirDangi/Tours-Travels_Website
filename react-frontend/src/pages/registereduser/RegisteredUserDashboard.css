@@ -1,0 +1,21 @@
+.registereduser-dashboard-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sidebar-container {
+  width: 250px;       /* fixed width sidebar */
+  flex-shrink: 0;     /* prevent shrinking */
+  background-color: #1e293b; /* your sidebar bg */
+  color: white;
+  overflow-y: auto;   /* scroll if sidebar is tall */
+}
+
+.dashboard-main {
+  flex: 1;
+  min-width: 300px;    /* prevent content from shrinking too much */
+  background-color: #f8fafc;
+  padding: 30px;
+  overflow-y: auto;
+}

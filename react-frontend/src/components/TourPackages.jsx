@@ -41,7 +41,8 @@ const TourPackages = () => {
 
   const handlePackageClick = (pkg) => {
     // Navigate to the booking page with the package_id in the URL
-    navigate(`/booking/${pkg.id}`);
+    navigate(`/booking/${pkg.id}`, { state: { package: pkg } });
+
   };
 
   const handlePageChange = (page) => {

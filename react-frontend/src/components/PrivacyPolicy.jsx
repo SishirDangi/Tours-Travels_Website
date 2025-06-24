@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PrivacyPolicy.css";
 import { FaChevronRight } from "react-icons/fa";
-import Footer from "./Footer";
+
 const sections = [
   {
     title: "INFORMATION COLLECTION",
@@ -48,40 +48,38 @@ const sections = [
 const PrivacyPolicy = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const toggleSection = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
 
   return (
     <>
-    <div className="privacy-wrapper">
-      <h1 className="page-title">Privacy Policy</h1>
-      {sections.map((section, index) => (
-        <div key={index} className="accordion-section">
-          <div
-            className={`accordion-header ${
-              index === activeIndex ? "active" : ""
-            }`}
-            onClick={() => toggleSection(index)}
-          >
-            <FaChevronRight
-              className={`chevron-icon ${
-                index === activeIndex ? "rotate" : ""
-              }`}
-            />
-            <span className="accordion-title">{section.title}</span>
-          </div>
-          {index === activeIndex && (
-            <div className="accordion-content">
-              <p>{section.content}</p>
+      <div className="privacy-wrapper">
+        <h1 className="page-title">Privacy Policy</h1>
+        {sections.map((section, index) => (
+          <div key={index} className="accordion-section">
+            <div
+              className={`accordion-header ${index === activeIndex ? "active" : ""}`}
+              onClick={() => toggleSection(index)}
+            >
+              <FaChevronRight
+                className={`chevron-icon ${index === activeIndex ? "rotate" : ""}`}
+              />
+              <span className="accordion-title">{section.title}</span>
             </div>
-          )}
-        </div>
-      ))}
-    </div>
-    <div>
-        <Footer/>
-    </div>
+            {index === activeIndex && (
+              <div className="accordion-content">
+                <p>{section.content}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+  
     </>
   );
 };

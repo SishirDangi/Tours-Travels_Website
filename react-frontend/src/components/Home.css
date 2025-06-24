@@ -1,48 +1,172 @@
-/* Home Container */
-.home-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+/* =========================
+   GENERAL PAGE SETTINGS
+========================= */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-/* Background Image */
-.home-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: url('/homepage.jpg') no-repeat center center/cover;
-    filter: brightness(30%);
-    z-index: -1;
+#root {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
-/* Explore Section */
-.Explore {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    font-size: 1.5rem;
+/* =========================
+    HOME SLIDESHOW
+========================= */
+.home-slideshow {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-.togo{
-    color: white;
-    margin-top: 5px;
+.home-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Searchbar */
-.searchbar {
-    margin-top: 30px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.home-slide.active {
+  opacity: 1;
+}
+
+.home-slide-content {
+  text-align: center;
+  color: #fff;
+  z-index: 2;
+  position: relative;
+}
+
+.home-slide-content h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: bold;
+  padding: 0 1rem;
+  position: relative;
+  top: -10%; 
+  text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.home-slide::before {
+  content: ""; 
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* =========================
+    NEXT/PREV BUTTONS
+========================= */
+.prev-button,
+.next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2.5rem;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+  padding: 0 15px;
+  user-select: none;
+  transition: opacity 0.3s;
+}
+
+.prev-button {
+  left: 15px;
+}
+
+.next-button {
+  right: 15px;
+}
+
+.prev-button:hover,
+.next-button:hover {
+  opacity: 0.8;
+}
+
+/* =========================
+    DOTS NAVIGATION
+========================= */
+.home-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 3;
+}
+
+.home-dot {
+  height: 12px;
+  width: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.home-dot.active {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+
+/* DEFAULT SLIDE STYLE */
+.default-slide {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
+.default-slide::before {
+  content: "";  
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: url("/homepage.jpg") no-repeat center center/cover;
+  filter: brightness(30%);
+  z-index: -1;
+}
+
+
+/* =========================
+    RESPONSIVE STYLES
+========================= */
+@media (max-width: 768px) {
+  .home-slide-content h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    top: -8%; 
+  }
+
+  .prev-button,
+  .next-button {
+    font-size: 2rem;
+  }
+
+  .home-dots {
+    bottom: 15px;
+    gap: 8px;
+  }
 }

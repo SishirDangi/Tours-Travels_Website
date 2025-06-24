@@ -1,40 +1,38 @@
-/* Booking Page CSS */
-.booking-container {
+/* Booking Page Container */
+.unique-admin-booking-container {
   padding: 20px;
   margin-top: 60px;
-  text-align: center; /* Center the text and image */
+  text-align: center;
 }
 
-.booking-title {
-  text-align: center;
-  margin-bottom: 30px;
+.unique-admin-booking-title {
   font-size: 2rem;
   font-weight: bold;
   color: #333;
+  margin-bottom: 30px;
 }
 
-/* Package Image Styling */
-.tourpackage-package-image {
-  width: 100%; /* Ensure the image takes full width of the container */
-  height: 40vh; /* Adjust height as needed (40% of the viewport height) */
-  object-fit: cover; /* Maintain aspect ratio while covering the area */
-  margin: 0;
-  display: block; /* Ensure it spans the entire width */
+/* Package Image */
+.unique-admin-tourpackage-package-image {
+  width: 100%;
+  height: 40vh;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
 }
 
-/* Booking Content (Form + Package Info) */
-.booking-content {
+/* Layout: Form and Info Side by Side */
+.unique-admin-booking-content {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 20px;
-  max-width: 100%; /* Ensures no horizontal overflow */
+  max-width: 100%;
 }
 
-/* Package Info and Booking Form Styling */
-.package-info,
-.booking-form {
+.unique-admin-package-info,
+.unique-admin-booking-form {
   flex: 1;
   min-width: 320px;
   max-width: 500px;
@@ -42,41 +40,42 @@
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  text-align: left; /* Align inner text left inside cards */
+  text-align: left;
 }
 
-.package-info h3,
-.booking-form h3 {
+.unique-admin-package-info h3,
+.unique-admin-booking-form h3 {
   margin-bottom: 20px;
-  color: #333;
   font-size: 1.5rem;
+  color: #333;
 }
 
-.package-details p {
+.unique-admin-package-details p {
   margin-bottom: 12px;
+  color: #444;
 }
 
-.package-details h4 {
+.unique-admin-package-details h4 {
   margin-top: 20px;
   margin-bottom: 10px;
   font-size: 1.2rem;
-  color: #b8860b; /* Dark golden color */
+  color: #b8860b;
 }
 
-/* Form Groups */
-.form-group {
+/* Form Fields */
+.unique-admin-form-group {
   margin-bottom: 20px;
 }
 
-.form-group label {
+.unique-admin-form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
   color: #333;
 }
 
-.form-group input,
-.form-group select {
+.unique-admin-form-group input,
+.unique-admin-form-group select {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
@@ -85,44 +84,15 @@
   transition: border-color 0.3s;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #b8860b; /* Highlight input on focus */
+.unique-admin-form-group input:focus,
+.unique-admin-form-group select:focus {
+  border-color: #b8860b;
   outline: none;
 }
 
-/* Mobile Input Special Styling */
-.mobile-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.mobile-input span {
-  padding: 10px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  min-width: 60px;
-  text-align: center;
-}
-
-/* Success and Error Messages */
-.success-msg {
-  color: green;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.error-msg {
-  color: red;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
 /* Booking Button */
-.book-btn {
-  background-color: #b8860b; /* Dark golden */
+.unique-admin-book-btn {
+  background-color: #b8860b;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -134,13 +104,103 @@
   transition: background-color 0.3s;
 }
 
-.book-btn:hover {
+.unique-admin-book-btn:hover {
   background-color: #a6760a;
 }
 
-/* Responsive Behavior */
+/* Modal Overlay */
+.unique-admin-booking-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Content */
+.unique-admin-booking-modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  animation: unique-admin-fadeIn 0.3s ease-in-out;
+}
+
+.unique-admin-booking-modal p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* Modal Buttons */
+.unique-admin-modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+.unique-admin-modal-buttons .unique-admin-yes-btn,
+.unique-admin-modal-buttons .unique-admin-no-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.unique-admin-modal-buttons .unique-admin-yes-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.unique-admin-modal-buttons .unique-admin-yes-btn:hover {
+  background-color: #218838;
+}
+
+.unique-admin-modal-buttons .unique-admin-no-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.unique-admin-modal-buttons .unique-admin-no-btn:hover {
+  background-color: #c82333;
+}
+
+.unique-package-info-title {
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  height: 100px;           /* adjust as needed */
+  font-size: 1.5rem;       /* increase text size */
+  font-weight: bold;       /* optional, makes text bolder */
+}
+
+
+/* Animation */
+@keyframes unique-admin-fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .booking-content {
+  .unique-admin-booking-content {
     flex-direction: column;
     align-items: center;
   }

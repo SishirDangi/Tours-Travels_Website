@@ -10,6 +10,7 @@ import {
   FaBox,
   FaEnvelope,
   FaUsersCog,
+  FaPlusCircle,
   FaClipboardList,
 } from "react-icons/fa";
 import "./AdminSidebar.css";
@@ -65,7 +66,9 @@ const AdminSidebar = () => {
         <NavLink to="active-tours"><FaRoute /> Active Tours</NavLink>
         <NavLink to="guides"><FaUsers /> Guides</NavLink>
         <NavLink to="users"><FaUsersCog /> Users</NavLink>
+        <NavLink to="add-details"><FaPlusCircle /> Add Home Page Details</NavLink>
         <NavLink to="settings"><FaCog /> Settings</NavLink>
+        
       </nav>
 
       {isLoggedIn && (
