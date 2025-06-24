@@ -134,13 +134,17 @@ class PackageController extends Controller
         }
     }
 
+<<<<<<< HEAD
     // Count total packages
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
     public function count()
     {
         $count = Package::count();
         return response()->json(['count' => $count]);
     }
 
+<<<<<<< HEAD
     // 🔒 Shared Validation Method with Custom Messages
     private function validatePackage(Request $request)
     {
@@ -199,4 +203,6 @@ class PackageController extends Controller
     }
 
 
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 }

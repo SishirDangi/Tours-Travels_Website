@@ -20,12 +20,16 @@ class ContactController extends Controller
         return response()->json(['message' => 'Contact details not found.'], 404);
     }
 
+<<<<<<< HEAD
     // Return the total number of contacts (optional)
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
     public function count()
     {
         $count = Contact::count();
         return response()->json(['count' => $count]);
     }
+<<<<<<< HEAD
 
     // Update contact info by ID (ensure user owns the contact or add proper authorization)
 public function update(Request $request, $id)
@@ -50,4 +54,6 @@ public function update(Request $request, $id)
         'contact' => $contact
     ]);
 }
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 }

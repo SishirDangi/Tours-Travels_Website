@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+<<<<<<< HEAD
+=======
+
+use App\Models\User;
+use App\Models\Contact;
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -60,14 +66,18 @@ public function changePassword(Request $request): JsonResponse
         return response()->json(['message' => 'User deleted successfully.']);
     }
 
+<<<<<<< HEAD
     /**
      * Get total user count.
      */
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
     public function count(): JsonResponse
     {
         return response()->json(['count' => User::count()]);
     }
 
+<<<<<<< HEAD
         public function changeAdminPassword(Request $request): JsonResponse
     {
         $user = auth()->user();
@@ -126,6 +136,9 @@ public function changePassword(Request $request): JsonResponse
     $contact->save();
 
     return response()->json(['message' => 'User updated successfully.', 'user' => $user->load('contact')]);
+=======
+
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 }
 
 

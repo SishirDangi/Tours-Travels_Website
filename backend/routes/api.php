@@ -19,6 +19,7 @@ use App\Http\Controllers\HomePageDetailController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
+<<<<<<< HEAD
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp']);
 
 // User data
@@ -42,6 +43,15 @@ Route::put('/contacts/{id}', [ContactController::class, 'update']);
 Route::get('/packages/random', [PackageController::class, 'getRandomPackages']);
 // Packages
 Route::get('packages/count', [PackageController::class, 'count']);
+=======
+
+Route::get('bookings/count', [BookingController::class, 'count']);
+
+Route::apiResource('bookings', BookingController::class);
+
+Route::get('packages/count', [PackageController::class, 'count']);
+
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 Route::apiResource('packages', PackageController::class);
 Route::get('/packages/{id}/details', [PackageController::class, 'getDetails']);
 
@@ -52,7 +62,10 @@ Route::get('/package-details/{packageId}', [PackageDetailController::class, 'sho
 Route::delete('/package-details/{packageId}', [PackageDetailController::class, 'destroy']);
 
 
+<<<<<<< HEAD
 // Guides
+=======
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 Route::get('guides/count', [GuideController::class, 'count']);
 Route::apiResource('guides', GuideController::class);
 
@@ -82,8 +95,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin-dashboard', [AuthController::class, 'index'])->middleware('role:admin');
 });
 
+<<<<<<< HEAD
 Route::apiResource('home-page-details', HomePageDetailController::class);
 
 Route::middleware('auth:sanctum')->post('/admin/change-password', [UserController::class, 'changeAdminPassword']);
 
+=======
+
+Route::get('users/count', [UserController::class, 'count']);
+
+Route::get('contacts/count', [ContactController::class, 'count']);
+Route::get('enquiries/count', [EnquiryController::class, 'count']);
+
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
 

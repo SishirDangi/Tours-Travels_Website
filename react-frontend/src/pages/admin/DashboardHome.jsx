@@ -101,4 +101,8 @@ const DashboardCard = ({ title, count, icon }) => (
   </div>
 );
 
+<<<<<<< HEAD
 export default DashboardHome;
+=======
+export default DashboardHome;
+>>>>>>> cd458b64ddb6588f48dd19c9fe4a8eef7f29b135
