@@ -1,0 +1,34 @@
+name: Deploy Laravel (No Zip)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, pdo, mysql
+
+      - name: Install dependencies (Laravel backend)
+        working-directory: backend
+        run: |
+          composer install --no-dev --optimize-autoloader
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C19D7178017444DBB77B29942A95626C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CB23C31453054C559515A5ABB04FB28F }}
